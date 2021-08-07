@@ -29,35 +29,37 @@
 			<p><b>I Nilai Pengetahuan, Praktik dan Sikap</b></p>
 			<!--begin: Datatable-->
 			<table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
-				<thead>
+				<thead class="text-center">
 					<tr>
-						<th style="width: 10px">No</th>
-						<th>Komponen</th>
-						<th>Actions</th>
+						<th rowspan="4" style="width: 10px">No</th>
+						<th rowspan="4">Komponen</th>
+						<th rowspan="1" colspan="8">Tahun Pelajaran</th>
+					</tr>
+					<tr>
+						<th colspan="8">Kelas : X IPA</th>
+					</tr>
+					<tr>
+						<th rowspan="2">KKM</th>
+						<th>SMT</th>
+						<th>:</th>
+						<th>1</th>
+
+						<th>SMT</th>
+						<th>:</th>
+						<th>2</th>
+					</tr>
+					<tr>
+						<th>Peng</th>
+						<th>Ketr</th>
+						<th>Skp</th>
+
+						<th>Peng</th>
+						<th>Ketr</th>
+						<th>Skp</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td><b>A</b></td>
-						<td><b>Kelompok Wajib A</b></td>
-						<td nowrap="nowrap"></td>
-					</tr>
-
-					<tr>
-						<td rowspan="3">1</td>
-						<td>PAI</td>
-						<td nowrap="nowrap"></td>
-					</tr>
-
-					<tr>
-						<td>a. Al-Qur'an</td>
-						<td nowrap="nowrap"></td>
-					</tr>
-
-					<tr>
-						<td>b. Aqidah</td>
-						<td nowrap="nowrap"></td>
-					</tr>
+					
 				</tbody>
 			</table>
 			<!--end: Datatable-->

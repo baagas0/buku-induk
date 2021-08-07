@@ -17,10 +17,12 @@ Assuming your machine meets all requirements - let's process to installation of 
 2. Run following commands
 
 ```bash
+on terminal
 composer install
 ```
 
 ```bash
+on terminal
 cp .env.example .env
 ```
 
@@ -29,18 +31,22 @@ Set up database configuration on .env file
 ```
 
 ```bash
+on terminal
 php artisan key:generate
 ```
 
 ```bash
-php artisan migrate:fresh --seed for seeding dummy data
+on terminal
+php artisan migrate:fresh --seed
 ```
 
 ```bash
+on terminal
 npm install && npm run dev
 ```
 
 ```bash
+on terminal
 php artisan serve
 ```
 

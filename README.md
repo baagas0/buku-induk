@@ -13,8 +13,10 @@ Metronic similarly uses additional plugins and frameworks, so ensure You have [C
 
 Assuming your machine meets all requirements - let's process to installation of Metronic Laravel integration (skeleton).
 
-1. Open in cmd or terminal app and navigate to this folder
-2. Run following commands
+1. Open in cmd or terminal app and navigate to apache server path
+2. run git clone https://github.com/baagas0/buku-induk.git
+3. Open in cmd or terminal app and navigate to this folder
+4. Run following commands
 
 ```bash
 on terminal

@@ -4,7 +4,13 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Student;
+use App\{
+    Student,
+    ThPelajaran,
+    UpdScore,
+    Aspek,
+};
+use DB;
 
 class StudentController extends Controller
 {
@@ -13,9 +19,37 @@ class StudentController extends Controller
         return view('teacher.student.main', $data);
     }
 
-    public function getView($nis){
-        $data['student'] = Student::where('nis', $nis)->first();
+    public function getView($nis, Request $request){
+        $th_pelajaran = $request->get('tahun_pelajaran');
+        
+        if ($th_pelajaran) {
+            $th = ThPelajaran::search($th_pelajaran);
+        }else {
+            $th = ThPelajaran::orderBy('th_mulai', 'desc')->first();
+        }
+        // dd($th);
 
+        $student = Student::where('nis', $nis)->first();
+        $tahunpelajaran = array(2021,2018);
+        $data['nilai'] = DB::select("
+            SELECT a.code, b.name, b.is_sub, c.name as subname
+            from kelompoks a 
+            left join mapels b on a.id=b.kelompok_id
+            left join sub_mapels c on b.id = c.mapel_id
+            ");
+
+        $data['aspeks'] = Aspek::whereHas('score', function($q) use($th, $student){
+            $q->where([
+                'th_pelajaran_id'   => $th->id,
+                'student_id'        => $student->id,
+            ]);
+        })->get();
+        $data['upds'] = UpdScore::where([
+            'th_pelajaran_id'   => $th->id,
+            'student_id'        => $student->id,
+        ])->get();
+        $data['th'] = $th;
+        $data['student'] = $student;
         return view('teacher.student.view', $data);
     }
 }

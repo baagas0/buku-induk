@@ -1,6 +1,21 @@
 @extends('teacher.layouts.app')
 @push('title', 'View Siswa')
 @section('content')
+<?php
+	$r_th = Request::get('tahun_pelajaran');
+?>
+<form class="row">
+	<div class="form-group col-md-6">
+		<label class="text-white text-hover-white opacity-75 hover-opacity-100">Tahun Pelajaran</label>
+		<div class="input-group">
+			<input type="text" class="form-control" name="tahun_pelajaran" id="filter_th_pelajaran" value="{{ $r_th ? $r_th : '' }}" placeholder="yyyy/yyyy" />
+			<div class="input-group-append">
+				<button type="submit" class="btn btn-info" type="button">Go!</button>
+			</div>
+		</div>
+		<span class="form-text text-muted">Input tahun pelajaran: <code>yyyy/yyyy</code></span>
+	</div>
+</form>
 <!--begin::Card-->
 <div class="card card-custom">
 	<div class="card-header">
@@ -20,6 +35,10 @@
 				<td>Nis</td>
 				<td> : {{ $student->nis }}</td>
 			</tr>
+			<tr>
+				<td>Tahun Pelajaran</td>
+				<td> : {{ $th->th_mulai.'/'.$th->th_selesai }}</td>
+			</tr>
 		</table>
 
 		<!--
@@ -33,7 +52,7 @@
 					<tr>
 						<th rowspan="4" style="width: 10px">No</th>
 						<th rowspan="4">Komponen</th>
-						<th rowspan="1" colspan="8">Tahun Pelajaran</th>
+						<th rowspan="1" colspan="8">Tahun Pelajaran : {{ $th->th_mulai.'/'.$th->th_selesai }}</th>
 					</tr>
 					<tr>
 						<th colspan="8">Kelas : X IPA</th>
@@ -59,7 +78,34 @@
 					</tr>
 				</thead>
 				<tbody>
-					
+					<?php 
+					$no = 1; 
+					$temp_kel="";
+					$temp_map="";?>
+
+					@foreach($nilai as $row)
+					<?php
+						
+						if($temp_kel!=$row->code){
+							$temp_kel=$row->code;
+							echo '<tr class="bg-primary"><td></td><td>'.$temp_kel.'</td></tr>';
+						}
+					?>
+					<?php if($row->is_sub==1 && $temp_map != $row->name){?>
+						<tr><td>{{ $no }}</td><td>{{ $row->name }}</td></tr>
+					<?php $no++; } $temp_map=$row->name;?>
+					<tr>
+						<?php if($row->is_sub == 1){ ?>
+							<td></td>
+							<td>{{ $row->subname }}</td>
+						<?php }else{ ?>
+							<td>{{ $no }}</td>
+							<td>{{ $row->name }}</td>
+							<?php $no++;?>
+						<?php } ?>
+						
+					</tr>
+					@endforeach
 				</tbody>
 			</table>
 			<!--end: Datatable-->
@@ -76,7 +122,7 @@
 					<tr class="text-center">
 						<th rowspan="2" style="width: 10px">No</th>
 						<th rowspan="2">Jenis Kegiatan</th>
-						<th colspan="2">TP 2017 2018</th>
+						<th colspan="2">TP {{ $th->th_mulai.'/'.$th->th_selesai }}</th>
 					</tr>
 					<tr>
 						<th>Smt 1</th>
@@ -84,12 +130,14 @@
 					</tr>
 				</thead>
 				<tbody>
+					@foreach($upds as $upd)
 					<tr>
-						<td>1</td>
-						<td>OSIM</td>
-						<td>B</td>
-						<td>A</td>
+						<td>{{ $loop->iteration }}</td>
+						<td>{{ $upd->upd->name }}</td>
+						<td>{{ $upd->n_smt_1 }}</td>
+						<td>{{ $upd->n_smt_2 }}</td>
 					</tr>
+					@endforeach
 				</tbody>
 			</table>
 			<!--end: Datatable-->
@@ -106,7 +154,7 @@
 					<tr class="text-center">
 						<th rowspan="2" style="width: 10px">No</th>
 						<th rowspan="2">Aspek Yang Dinilai</th>
-						<th colspan="2">TP 2017 2018</th>
+						<th colspan="2">TP {{ $th->th_mulai.'/'.$th->th_selesai }}</th>
 					</tr>
 					<tr>
 						<th>Semester 1</th>
@@ -114,12 +162,14 @@
 					</tr>
 				</thead>
 				<tbody>
+					@foreach($aspeks as $aspek)
 					<tr>
-						<td>1</td>
-						<td>Kedisiplinan</td>
-						<td>B</td>
-						<td>A</td>
+						<td>{{ $loop->iteration }}</td>
+						<td>{{ $aspek->name }}</td>
+						<td>{{ $aspek->score->n_smt_1 }}</td>
+						<td>{{ $aspek->score->n_smt_2 }}</td>
 					</tr>
+					@endforeach
 				</tbody>
 			</table>
 			<!--end: Datatable-->
@@ -129,14 +179,14 @@
 			Ketidakhadiran
 		-->
 		<fieldset class="Nilai 1 mt-6" >
-			<p><b>III Akhlak Mulia dan Kepribadian</b></p>
+			<p><b>IV Ketidakhadiran</b></p>
 			<!--begin: Datatable-->
 			<table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
 				<thead>
 					<tr class="text-center">
 						<th rowspan="2" style="width: 10px">No</th>
 						<th rowspan="2">Alasan Ketidakhadiran</th>
-						<th colspan="2">TP 2017 2018</th>
+						<th colspan="2">TP {{ $th->th_mulai.'/'.$th->th_selesai }}</th>
 					</tr>
 					<tr>
 						<th>Semester 1</th>
@@ -314,3 +364,31 @@
 </div>
 <!--end::Card-->
 @endsection
+@push('js')
+<script type="text/javascript">
+	// Class definition
+
+var KTInputmask = function () {
+
+ // Private functions
+ var demos = function () {
+  // date format
+  $("#filter_th_pelajaran").inputmask("9999/9999", {
+   "placeholder": "yyyy/yyyy",
+   autoUnmask: true
+  });
+ }
+
+ return {
+  // public functions
+  init: function() {
+   demos();
+  }
+ };
+}();
+
+jQuery(document).ready(function() {
+ KTInputmask.init();
+});
+</script>
+@endpush

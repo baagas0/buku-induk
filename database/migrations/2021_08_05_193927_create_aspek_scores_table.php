@@ -15,6 +15,11 @@ class CreateAspekScoresTable extends Migration
     {
         Schema::create('aspek_scores', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('aspek_id');
+            $table->foreignId('th_pelajaran_id');
+            $table->foreignId('student_id');
+            $table->string('n_smt_1');
+            $table->string('n_smt_2');
             $table->timestamps();
         });
     }

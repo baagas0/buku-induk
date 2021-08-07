@@ -19,5 +19,21 @@ class PengembanganDiriSeeder extends Seeder
         Upd::create(['name' => 'Pramuka']);
         Upd::create(['name' => 'PMR']);
         Upd::create(['name' => 'Voly']);
+
+        UpdScore::create([
+            'upd_id'            =>1,
+            'th_pelajaran_id'   =>2,
+            'student_id'        =>1,
+            'n_smt_1'           =>'A',
+            'n_smt_2'           =>'B',
+        ]);
+
+        UpdScore::create([
+            'upd_id'            =>2,
+            'th_pelajaran_id'   =>2,
+            'student_id'        =>1,
+            'n_smt_1'           =>'C',
+            'n_smt_2'           =>'B',
+        ]);
     }
 }

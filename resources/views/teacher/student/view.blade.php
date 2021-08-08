@@ -4,6 +4,7 @@
 <?php
 	$r_th = Request::get('tahun_pelajaran');
 ?>
+
 <form class="row">
 	<div class="form-group col-md-6">
 		<label class="text-white text-hover-white opacity-75 hover-opacity-100">Tahun Pelajaran</label>
@@ -52,12 +53,17 @@
 					<tr>
 						<th rowspan="4" style="width: 10px">No</th>
 						<th rowspan="4">Komponen</th>
-						<th rowspan="1" colspan="8">Tahun Pelajaran : {{ $th->th_mulai.'/'.$th->th_selesai }}</th>
+						<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
+							<th colspan="7">Tahun Pelajaran : {{ $tahunpelajaran[$i].'/'.($tahunpelajaran[$i]+1) }}</th>
+						<?php } ?>
 					</tr>
 					<tr>
-						<th colspan="8">Kelas : X IPA</th>
+					<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
+						<th colspan="7">Kelas : X IPA</th>
+						<?php } ?>
 					</tr>
 					<tr>
+						<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
 						<th rowspan="2">KKM</th>
 						<th>SMT</th>
 						<th>:</th>
@@ -66,15 +72,18 @@
 						<th>SMT</th>
 						<th>:</th>
 						<th>2</th>
+						<?php } ?>
 					</tr>
 					<tr>
-						<th>Peng</th>
-						<th>Ketr</th>
-						<th>Skp</th>
+						<?php for($i=0; $i<count($tahunpelajaran); $i++){ ?>
+							<th>Peng</th>
+							<th>Ketr</th>
+							<th>Skp</th>
 
-						<th>Peng</th>
-						<th>Ketr</th>
-						<th>Skp</th>
+							<th>Peng</th>
+							<th>Ketr</th>
+							<th>Skp</th>
+						<?php } ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -86,24 +95,95 @@
 					@foreach($nilai as $row)
 					<?php
 						
-						if($temp_kel!=$row->code){
-							$temp_kel=$row->code;
-							echo '<tr class="bg-primary"><td></td><td>'.$temp_kel.'</td></tr>';
+						// if($temp_kel!=$row->name){
+						// 	$temp_kel=$row->name;
+						// 	echo '<tr><td></td><td><b>'.$temp_kel.'</b></td>';
+							
+						// 	for($j=0;$j<count($tahunpelajaran)*7;$j++){
+						// 		echo '<td></td>';
+						// 	}
+						// 	echo '</tr>';
+						// }
+						if($temp_kel!=$row->nmkel){
+							$temp_kel=$row->nmkel;
+							$totcol = count($tahunpelajaran)*7+1;
+							echo '<tr class="bg-secondary"><td></td><td colspan="'.$totcol.'"><b>'.$temp_kel.'</b></td></tr>';
 						}
 					?>
-					<?php if($row->is_sub==1 && $temp_map != $row->name){?>
-						<tr><td>{{ $no }}</td><td>{{ $row->name }}</td></tr>
+
+					<?php if($row->is_sub==1 && $temp_map != $row->name){ $totcol = count($tahunpelajaran)*7+1;?>
+						<tr><td>{{ $no }}</td><td colspan="<?=$totcol?>">{{ $row->name }}masuk</td>
+						</tr>
 					<?php $no++; } $temp_map=$row->name;?>
+					
 					<tr>
-						<?php if($row->is_sub == 1){ ?>
-							<td></td>
-							<td>{{ $row->subname }}</td>
-						<?php }else{ ?>
+						<?php if($row->is_sub == 0){ ?>
 							<td>{{ $no }}</td>
-							<td>{{ $row->name }}</td>
+							<td>{{ $row->name}}</td>
+							<?php for($i=0; $i<count($tahunpelajaran); $i++){ ?>
+							<?php 
+								$mapelid = $row->nameid;
+								$thun2 = $tahunpelajaran[$i];
+								$q2 = DB::select("SELECT a.id, a.kkm, b.n_peng, b.n_ketr, b.n_skp , c.n_peng as n_peng2, c.n_ketr as n_ketr2, c.n_skp as n_skp2 from master_nilais a left join nilais b on a.id = b.master_nilai_id left join nilais c on a.id = c.master_nilai_id where a.th_pelajaran='$thun2' and a.mapel_id='$mapelid' and b.student_id='1' and b.semester='1' and c.student_id='1' and c.semester='2' limit 1");
+								if(count($q2)!=0){
+								?>
+								
+								@foreach($q2 as $qrow)
+								<td>{{ $qrow->kkm}}</td>
+								<td>{{ $qrow->n_peng }}</td>
+								<td>{{ $qrow->n_ketr }}</td>
+								<td>{{ $qrow->n_skp }}</td>
+								<td>{{ $qrow->n_peng2 }}</td>
+								<td>{{ $qrow->n_ketr2 }}</td>
+								<td>{{ $qrow->n_skp2 }}</td>
+								@endforeach
+							<?php }else{?>
+								<td>-</td>
+								<td>-</td>
+								<td>-</td>
+								<td>-</td>
+								<td>-</td>
+								<td>-</td>
+								<td>-</td>
+							<?php
+								
+							}
+
+							}?>
 							<?php $no++;?>
+						<?php }else{ ?>
+							<td></td>
+							<td>{{ $row->subname}}</td>
+							<?php for($i=0; $i<count($tahunpelajaran); $i++){ ?>
+							<?php 
+								$submapelid = $row->subnameid;
+								$thun1 = $tahunpelajaran[$i];
+								$q1 = DB::select("SELECT a.id, a.kkm, b.n_peng, b.n_ketr, b.n_skp , c.n_peng as n_peng2, c.n_ketr as n_ketr2, c.n_skp as n_skp2 from master_nilais a left join nilais b on a.id = b.master_nilai_id left join nilais c on a.id = c.master_nilai_id where a.th_pelajaran='$thun1' and a.sub_mapel_id='$submapelid' and b.student_id='1' and b.semester='1' and c.student_id='1' and c.semester='2' limit 1");
+								if(count($q1)!=0){
+									?>
+								@foreach($q1 as $qrow)
+								<td>{{ $qrow->kkm}}</td>
+								<td>{{ $qrow->n_peng }}</td>
+								<td>{{ $qrow->n_ketr }}</td>
+								<td>{{ $qrow->n_skp }}</td>
+								<td>{{ $qrow->n_peng2 }}</td>
+								<td>{{ $qrow->n_ketr2 }}</td>
+								<td>{{ $qrow->n_skp2 }}</td>
+								@endforeach
+								<?php }else{?>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								<?php
+									
+								}
+
+							}?>
 						<?php } ?>
-						
 					</tr>
 					@endforeach
 				</tbody>

@@ -31,9 +31,9 @@ class StudentController extends Controller
         // dd($th);
 
         $student = Student::where('nis', $nis)->first();
-        $tahunpelajaran = array(2021,2018);
+        $data['tahunpelajaran'] = array(2019,2020, 2022);
         $data['nilai'] = DB::select("
-            SELECT a.code, b.name, b.is_sub, c.name as subname
+            SELECT a.code,a.name as nmkel, b.name,b.id as nameid,  b.is_sub, c.name as subname, c.id as subnameid
             from kelompoks a 
             left join mapels b on a.id=b.kelompok_id
             left join sub_mapels c on b.id = c.mapel_id

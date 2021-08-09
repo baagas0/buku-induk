@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSemestersTable extends Migration
+class CreateMasterNilaisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateSemestersTable extends Migration
      */
     public function up()
     {
-        Schema::create('semesters', function (Blueprint $table) {
+        Schema::create('master_nilais', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->integer('th_pelajaran');
+            $table->enum('is_sub', [0,1])->default(0);
+            $table->foreignId('mapel_id');
+            $table->foreignId('sub_mapel_id');
+            $table->foreignId('kkm');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ class CreateSemestersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('semesters');
+        Schema::dropIfExists('master_nilais');
     }
 }

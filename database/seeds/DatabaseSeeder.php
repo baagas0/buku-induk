@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PengembanganDiriSeeder::class);
         $this->call(AspekSeeder::class);
         $this->call(KetidakhadiranSeeder::class);
+
+        $this->call(MasterNilaiSeeder::class);
     }
 }

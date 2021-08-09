@@ -17,7 +17,7 @@ class CreateNilaisTable extends Migration
             $table->id();
             $table->foreignId('student_id');
             $table->foreignId('master_nilai_id');
-            $table->foreignId('semester_id');
+            $table->enum('semester', [1,2]);
             $table->integer('n_peng');
             $table->integer('n_ketr');
             $table->integer('n_skp');

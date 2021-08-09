@@ -9,6 +9,7 @@ use App\{
     ThPelajaran,
     UpdScore,
     Aspek,
+    Ketidakhadiran,
 };
 use DB;
 
@@ -48,6 +49,12 @@ class StudentController extends Controller
             'th_pelajaran_id'   => $th->id,
             'student_id'        => $student->id,
         ])->get();
+        $data['ketidakhadirans'] = Ketidakhadiran::whereHas('score', function($q) use($th, $student){
+            $q->where([
+                'th_pelajaran_id'   => $th->id,
+                'student_id'        => $student->id,
+            ]);
+        })->get();
         $data['th'] = $th;
         $data['student'] = $student;
         return view('teacher.student.view', $data);

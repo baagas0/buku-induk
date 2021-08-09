@@ -194,18 +194,14 @@
 					</tr>
 				</thead>
 				<tbody>
+					@foreach($ketidakhadirans as $row)
 					<tr>
-						<td>1</td>
-						<td>Sakit</td>
-						<td>1</td>
-						<td>3</td>
+						<td>{{ $loop->iteration }}</td>
+						<td>{{ $row->name }}</td>
+						<td>{{ $row->score->n_smt_1 }}</td>
+						<td>{{ $row->score->n_smt_2 }}</td>
 					</tr>
-					<tr>
-						<td>2</td>
-						<td>Izin</td>
-						<td>1</td>
-						<td>3</td>
-					</tr>
+					@endforeach
 				</tbody>
 			</table>
 			<!--end: Datatable-->
@@ -222,7 +218,7 @@
 					<tr class="text-center">
 						<th style="width: 10px">No</th>
 						<th>Kegiatan Yang Diikuti</th>
-						<th>Bukti Sertifikat</th>
+						<th>Nomor Sertifikat</th>
 					</tr>
 				</thead>
 				<tbody>

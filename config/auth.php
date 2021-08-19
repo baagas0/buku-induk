@@ -36,6 +36,11 @@ return [
     */
 
     'guards' => [
+        'tu' => [
+            'driver' => 'session',
+            'provider' => 'tus',
+        ],
+
         'student' => [
             'driver' => 'session',
             'provider' => 'students',
@@ -81,6 +86,11 @@ return [
     */
 
     'providers' => [
+        'tus' => [
+            'driver' => 'eloquent',
+            'model' => App\Tu::class,
+        ],
+
         'students' => [
             'driver' => 'eloquent',
             'model' => App\Student::class,
@@ -123,6 +133,13 @@ return [
     */
 
     'passwords' => [
+        'tus' => [
+            'provider' => 'tus',
+            'table' => 'tu_password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
         'students' => [
             'provider' => 'students',
             'table' => 'student_password_resets',

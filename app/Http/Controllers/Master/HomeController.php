@@ -13,7 +13,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('master.auth:master');
+        // $this->middleware('master.auth:master');
     }
 
     /**
@@ -22,6 +22,6 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index() {
-        return view('master.home');
+        return view('master.dashboard');
     }
 }

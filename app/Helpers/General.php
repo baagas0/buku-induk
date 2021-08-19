@@ -53,3 +53,19 @@ if (!function_exists('routeController')) {
         }
     }
 }
+
+if (!function_exists('th_pelajaran')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function th_pel($year)
+    {
+        $data['mulai']   = substr($year, 0, 4);
+        $data['selesai'] = substr($year, -4);
+        return $data;
+    }
+}

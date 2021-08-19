@@ -52,6 +52,10 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
+        'tu.auth' => \App\Http\Middleware\RedirectIfNotTu::class,
+        'tu.guest' => \App\Http\Middleware\RedirectIfTu::class,
+        // 'tu.verified' => \App\Http\Middleware\EnsureTuEmailIsVerified::class,
+        // 'tu.password.confirm' => \App\Http\Middleware\RequireTuPassword::class,
         'student.auth' => \App\Http\Middleware\RedirectIfNotStudent::class,
         'student.guest' => \App\Http\Middleware\RedirectIfStudent::class,
         // 'student.verified' => \App\Http\Middleware\EnsureStudentEmailIsVerified::class,

@@ -22,7 +22,7 @@ class PengembanganDiriSeeder extends Seeder
 
         UpdScore::create([
             'upd_id'            =>1,
-            'th_pelajaran_id'   =>2,
+            'th_pelajaran'   =>2019,
             'student_id'        =>1,
             'n_smt_1'           =>'A',
             'n_smt_2'           =>'B',
@@ -30,7 +30,7 @@ class PengembanganDiriSeeder extends Seeder
 
         UpdScore::create([
             'upd_id'            =>2,
-            'th_pelajaran_id'   =>2,
+            'th_pelajaran'   =>2019,
             'student_id'        =>1,
             'n_smt_1'           =>'C',
             'n_smt_2'           =>'B',

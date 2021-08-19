@@ -1,7 +1,19 @@
 <?php
 
-routeController('mapel', 'teacher\MapelController');
-routeController('student', 'teacher\StudentController');
+Route::group(['middleware' => ['auth:teacher'],'namespace' => 'Teacher', 'as' => 'teacher.'], function() {
+    routeController('mapel', 'teacher\MapelController');
+    routeController('student', 'teacher\StudentController');
+    routeController('nilai', 'teacher\NilaiController');
+
+    routeController('nilai', 'teacher\NilaiController');
+    routeController('upd', 'teacher\UpdController');
+    routeController('akhlak', 'teacher\AkhlakController');
+    routeController('ketidakhadiran', 'teacher\KetidakhadiranController');
+    routeController('prestasi', 'teacher\PrestasiController');
+    routeController('kelulusan', 'teacher\KelulusanController');
+    routeController('hasil_ujian', 'teacher\HasilUjianController');
+
+});
 
 Route::group(['namespace' => 'Teacher'], function() {
     // Dashboard

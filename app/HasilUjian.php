@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MaterNilai extends Model
+class HasilUjian extends Model
 {
     protected $fillable = [
-        'th_pelajaran_id',
-        'is_sub',
+        'student_id',
         'mapel_id',
         'sub_mapel_id',
-        'kkm',
+        'n_um',
+        'n_ijazah',
     ];
 }

@@ -20,11 +20,19 @@ class KetidakhadiranSeeder extends Seeder
         Ketidakhadiran::create(['name' => 'Tanpa Keterangan']);
 
         KetidakhadiranScore::create([
-            'ketidakhadiran_id' =>1,
-            'th_pelajaran_id'   =>2,
-            'student_id'        =>1,
-            'n_smt_1'           =>1,
-            'n_smt_2'           =>0,
+            'ketidakhadiran_id' => 1,
+            'th_pelajaran'      => 2019,
+            'student_id'        => 1,
+            'n_smt_1'           => 1,
+            'n_smt_2'           => 0,
+        ]);
+
+        KetidakhadiranScore::create([
+            'ketidakhadiran_id' => 1,
+            'th_pelajaran'      => 2020,
+            'student_id'        => 1,
+            'n_smt_1'           => 3,
+            'n_smt_2'           => 2,
         ]);
     }
 }

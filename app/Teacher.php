@@ -58,4 +58,16 @@ class Teacher extends Authenticatable
     {
         $this->notify(new VerifyEmail);
     }
+
+    public function getMapelAttribute()
+    {
+        $mapel = json_decode($this->attributes['mapel']);
+
+        $viewMapel = '';
+        foreach ($mapel as $key => $row) {
+            $viewMapel .= '<span class="label label-light-success label-pill label-inline mr-2">'.$row.'</span>';
+        }
+
+        return $viewMapel;
+    }
 }

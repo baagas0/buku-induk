@@ -16,7 +16,7 @@ class CreateKetidakhadiranScoresTable extends Migration
         Schema::create('ketidakhadiran_scores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ketidakhadiran_id');
-            $table->foreignId('th_pelajaran_id');
+            $table->foreignId('th_pelajaran');
             $table->foreignId('student_id');
             $table->integer('n_smt_1');
             $table->integer('n_smt_2');

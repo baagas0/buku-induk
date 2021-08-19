@@ -16,8 +16,8 @@ class CreateUpdScoresTable extends Migration
         Schema::create('upd_scores', function (Blueprint $table) {
             $table->id();
             $table->foreignId('upd_id');
-            $table->foreignId('th_pelajaran_id');
             $table->foreignId('student_id');
+            $table->integer('th_pelajaran');
             $table->string('n_smt_1');
             $table->string('n_smt_2');
             $table->timestamps();

@@ -17,7 +17,7 @@ class Student extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'nis', 'email', 'password',
+        'name','kelas_id', 'nis', 'email', 'password',
     ];
 
     /**
@@ -57,5 +57,10 @@ class Student extends Authenticatable
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail);
+    }
+
+    public function kelas()
+    {
+        return $this->hasOne('App\Kelas', 'id', 'kelas_id');
     }
 }

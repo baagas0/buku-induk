@@ -1,17 +1,17 @@
 <?php
 
 Route::group(['middleware' => ['auth:teacher'],'namespace' => 'Teacher', 'as' => 'teacher.'], function() {
-    routeController('mapel', 'teacher\MapelController');
-    routeController('student', 'teacher\StudentController');
-    routeController('nilai', 'teacher\NilaiController');
+    routeController('mapel', 'Teacher\MapelController');
+    routeController('student', 'Teacher\StudentController');
+    routeController('nilai', 'Teacher\NilaiController');
 
-    routeController('nilai', 'teacher\NilaiController');
-    routeController('upd', 'teacher\UpdController');
-    routeController('akhlak', 'teacher\AkhlakController');
-    routeController('ketidakhadiran', 'teacher\KetidakhadiranController');
-    routeController('prestasi', 'teacher\PrestasiController');
-    routeController('kelulusan', 'teacher\KelulusanController');
-    routeController('hasil_ujian', 'teacher\HasilUjianController');
+    routeController('nilai', 'Teacher\NilaiController');
+    routeController('upd', 'Teacher\UpdController');
+    routeController('akhlak', 'Teacher\AkhlakController');
+    routeController('ketidakhadiran', 'Teacher\KetidakhadiranController');
+    routeController('prestasi', 'Teacher\PrestasiController');
+    routeController('kelulusan', 'Teacher\KelulusanController');
+    routeController('hasil_ujian', 'Teacher\HasilUjianController');
 
 });
 

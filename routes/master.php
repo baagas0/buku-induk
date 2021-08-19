@@ -1,15 +1,15 @@
 <?php
 
 Route::group(['middleware' => ['auth:master'],'namespace' => 'Master', 'as' => 'master.'], function() {
-    routeController('mapel', 'master\MapelController');
-    routeController('student', 'master\StudentController');
+    routeController('mapel', 'Master\MapelController');
+    routeController('student', 'Master\StudentController');
 
-    routeController('kelulusan', 'master\KelulusanController');
-    routeController('hasil_ujian', 'master\HasilUjianController');
+    routeController('kelulusan', 'Master\KelulusanController');
+    routeController('hasil_ujian', 'Master\HasilUjianController');
 
     Route::group(['namespace' => 'User', 'as' => 'user.'], function() {
-        routeController('teacher', 'master\Pengguna\TeacherController');
-        routeController('master', 'master\Pengguna\MasterController');
+        routeController('teacher', 'Master\Pengguna\TeacherController');
+        routeController('master', 'Master\Pengguna\MasterController');
     });
 });
 

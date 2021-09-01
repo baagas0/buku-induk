@@ -137,8 +137,9 @@
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">Wali Kelas</label>
 								<select name="kelas_id" id="kelas" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
+									<option value="">Pilih Kelas</option>
 									@foreach($kelases as $kelas)
-									<option>{{ $kelas->name }}</option>
+									<option value="{{ $kelas->id }}">{{ $kelas->name }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -158,7 +159,7 @@
 							<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
 								<div>Nama : <span id="confirm-name"></span></div>
 								<div>Email : <span id="confirm-email"></span></div>
-								<div>********</div>
+								<div>Kata Sandi : ********</div>
 							</div>
 							<!--end::Section-->
 							<!--begin::Section-->
@@ -298,28 +299,50 @@
 				$('#confirm-name').text($('#name').val());
 				$('#confirm-email').text($('#email').val());
 				$('#confirm-mapel').text($('#mapel').val());
-				$('#confirm-kelas').text($('#kelas').val());
+				$('#confirm-kelas').text($('#kelas option:selected').text());
 			});
 
 			// Submit event
 			_wizardObj.on('submit', function (wizard) {
 				Swal.fire({
-					text: "All is good! Please confirm the form submission.",
+					text: "Semua telah terisi, Lakukan konfirmasi pengiriman data guru!.",
 					icon: "success",
 					showCancelButton: true,
 					buttonsStyling: false,
-					confirmButtonText: "Yes, submit!",
-					cancelButtonText: "No, cancel",
+					confirmButtonText: "Ya, submit!",
+					cancelButtonText: "Tidak, gagal",
 					customClass: {
 						confirmButton: "btn font-weight-bold btn-primary",
 						cancelButton: "btn font-weight-bold btn-default"
 					}
 				}).then(function (result) {
 					if (result.value) {
-						_formEl.submit(); // Submit form
+						// _formEl.submit(); // Submit form
+						var name = $('#name').val();
+						var email = $('#email').val();
+						var mapel = $('#mapel').val();
+						var kelas = $('#kelas').val();
+
+						$.ajax({
+							type: "POST",
+							url: "{{ route('master.user.teacher.save') }}",
+							data: {
+								name: name,
+								email: email,
+								mapel: mapel,
+								kelas: kelas,
+							},
+							success: function(data){
+								toastr.success('Berhasil Menambah data Guru');
+								window.location.href = "{{ route('master.user.teacher') }}";
+							},
+							error: function(data){
+								toastr.error('Gagal Menambah data Guru, Silahkan cek inputan anda');
+							}
+						});	
 					} else if (result.dismiss === 'cancel') {
 						Swal.fire({
-							text: "Your form has not been submitted!.",
+							text: "Inputan Gagal Disimpan!.",
 							icon: "error",
 							buttonsStyling: false,
 							confirmButtonText: "Ok, got it!",

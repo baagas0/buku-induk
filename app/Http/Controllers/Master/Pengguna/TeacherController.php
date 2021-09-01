@@ -34,4 +34,14 @@ class TeacherController extends Controller
         $data['mapels'] = Mapel::get();
         return view('master.user.guru.form', $data);
     }
+
+    public function postSave(Request $req) {
+        return Teacher::create([
+            'name'      => $req->name,
+            'email'     => $req->email,
+            'password'  => bcrypt($req->password),
+            'kelas_id'  => $req->kelas,
+            'mapel'     => json_encode($req->mapel),
+        ]);
+    }
 }

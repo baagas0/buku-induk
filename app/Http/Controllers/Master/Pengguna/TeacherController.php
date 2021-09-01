@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use App\Http\Resources\TeacherResource;
-use App\{Teacher, Kelompok};
+use App\{
+    Teacher,
+    Kelompok,
+    Kelas,
+    Mapel,
+};
 
 class TeacherController extends Controller
 {
@@ -25,6 +30,8 @@ class TeacherController extends Controller
 
     public function getCreate() {
         $data['kelompoks'] = Kelompok::get();
+        $data['kelases'] = Kelas::get();
+        $data['mapels'] = Mapel::get();
         return view('master.user.guru.form', $data);
     }
 }

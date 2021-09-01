@@ -91,13 +91,19 @@
 							<!--begin::Form Group-->
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">Nama Guru</label>
-								<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="name" placeholder="Nama Guru" value="" />
+								<input type="text" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" name="name" id="name" placeholder="Nama Guru" value="" />
 							</div>
 							<!--end::Form Group-->
 							<!--begin::Form Group-->
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">E-mail</label>
-								<input type="email" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="email" placeholder="E-mail Pengguna" value="" />
+								<input type="email" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="email" id="email" placeholder="E-mail Pengguna" value="" />
+							</div>
+							<!--end::Form Group-->
+							<!--begin::Form Group-->
+							<div class="form-group">
+								<label class="font-size-h6 font-weight-bolder text-dark">Kata Sandi</label>
+								<input type="password" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="password" placeholder="Kata Sandi Pengguna" id="password" value="" />
 							</div>
 							<!--end::Form Group-->
 						</div>
@@ -113,8 +119,8 @@
 							<!--end::Title-->
 							<!--begin::Form Group-->
 							<div class="form-group">
-								<label class="font-size-h6 font-weight-bolder text-dark">Mata Pelajaran</label>
-								<select name="country" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
+								<label class="font-size-h6 font-weight-bolder text-dark">Mata Pelajaran</label><br>
+								<select name="mapel" id="mapel" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6" multiple="multiple">
 									@foreach($kelompoks as $kelompok)
 									<?php
 										$mapels = App\Mapel::where('kelompok_id', $kelompok->id)->get();
@@ -130,8 +136,10 @@
 
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">Wali Kelas</label>
-								<select name="country" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
-
+								<select name="kelas_id" id="kelas" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
+									@foreach($kelases as $kelas)
+									<option>{{ $kelas->name }}</option>
+									@endforeach
 								</select>
 							</div>
 							<!--begin::Form Group-->
@@ -141,31 +149,23 @@
 						<div class="pb-5" data-wizard-type="step-content">
 							<!--begin::Title-->
 							<div class="pb-10 pb-lg-15">
-								<h3 class="font-weight-bolder text-dark font-size-h2">Complete</h3>
-								<div class="text-muted font-weight-bold font-size-h4">Complete Your Signup And Become A Member!</div>
+								<h3 class="font-weight-bolder text-dark font-size-h2">Sebentar Lagi</h3>
+								<div class="text-muted font-weight-bold font-size-h4">Teliti data anda sebelum mengkonfirmasi!</div>
 							</div>
 							<!--end::Title-->
 							<!--begin::Section-->
-							<h4 class="font-weight-bolder mb-3">Accoun Settings:</h4>
+							<h4 class="font-weight-bolder mb-3">Detail Akun:</h4>
 							<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-								<div>Nick Stone</div>
-								<div>+12233434-34</div>
-								<div>nick.stone@gmail.com</div>
+								<div>Nama : <span id="confirm-name"></span></div>
+								<div>Email : <span id="confirm-email"></span></div>
+								<div>********</div>
 							</div>
 							<!--end::Section-->
 							<!--begin::Section-->
-							<h4 class="font-weight-bolder mb-3">Address Details:</h4>
+							<h4 class="font-weight-bolder mb-3">Data Tambahan:</h4>
 							<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-								<div>Address Line 1</div>
-								<div>Address Line 2</div>
-								<div>Melbourne 3000, VIC, Australia</div>
-							</div>
-							<!--end::Section-->
-							<!--begin::Section-->
-							<h4 class="font-weight-bolder mb-3">Support Channels:</h4>
-							<div class="text-dark-50 font-weight-bold line-height-lg mb-8">
-								<div>Overnight Delivery with Regular Packaging</div>
-								<div>Preferred Morning (8:00AM - 11:00AM) Delivery</div>
+								<div>Mata Pelajaran : <span id="confirm-mapel"></span></div>
+								<div>Wali Kelas : <span id="confirm-kelas"></span></div>
 							</div>
 							<!--end::Section-->
 						</div>
@@ -237,9 +237,11 @@
 	var KTWizard5 = function () {
 		$('#mapel').select2({
 			placeholder: "Pilih Mata Pelajaran",
+			width: '100%'
 		});
-		$('#Kelas').select2({
+		$('#kelas').select2({
 			placeholder: "Pilih Kelas",
+			width: '100%'
 		});
 
 		// Base elements
@@ -293,6 +295,10 @@
 			// Change event
 			_wizardObj.on('changed', function (wizard) {
 				KTUtil.scrollTop();
+				$('#confirm-name').text($('#name').val());
+				$('#confirm-email').text($('#email').val());
+				$('#confirm-mapel').text($('#mapel').val());
+				$('#confirm-kelas').text($('#kelas').val());
 			});
 
 			// Submit event
@@ -347,6 +353,13 @@
 								}
 							}
 						},
+						password: {
+							validators: {
+								notEmpty: {
+									message: 'Cek data kata sandi pengguna'
+								}
+							}
+						},
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),
@@ -364,48 +377,13 @@
 				_formEl,
 				{
 					fields: {
-						address1: {
+						mapel: {
 							validators: {
 								notEmpty: {
 									message: 'Address is required'
 								}
 							}
 						},
-						address2: {
-							validators: {
-								notEmpty: {
-									message: 'Address is required'
-								}
-							}
-						},
-						postcode: {
-							validators: {
-								notEmpty: {
-									message: 'Postcode is required'
-								}
-							}
-						},
-						city: {
-							validators: {
-								notEmpty: {
-									message: 'City is required'
-								}
-							}
-						},
-						state: {
-							validators: {
-								notEmpty: {
-									message: 'State is required'
-								}
-							}
-						},
-						country: {
-							validators: {
-								notEmpty: {
-									message: 'Country is required'
-								}
-							}
-						}
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),

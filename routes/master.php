@@ -7,6 +7,8 @@ Route::group(['middleware' => ['auth:master'],'namespace' => 'Master', 'as' => '
     routeController('kelulusan', 'Master\KelulusanController');
     routeController('hasil_ujian', 'Master\HasilUjianController');
 
+    routeController('setting', 'Master\SettingController');
+
     Route::group(['namespace' => 'User', 'as' => 'user.'], function() {
         routeController('teacher', 'Master\Pengguna\TeacherController');
         routeController('master', 'Master\Pengguna\MasterController');

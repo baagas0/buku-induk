@@ -97,7 +97,7 @@
 					<select class="form-control select2" id="mapel" name="mapel">
 						@foreach($kelompok as $row)
 						<optgroup label="{{ $row->name }}">
-							<?php $mapels = App\Mapel::where('kelompok_id', $row->id)->whereIn('name', json_decode(Auth::guard('teacher')->user()->mapel))->get() ?>
+							<?php $mapels = App\Mapel::where('kelompok_id', $row->id)->whereIn('name', Auth::guard('teacher')->user()->lmapel)->get() ?>
 							@foreach($mapels as $mapel)
 								@if($mapel->is_sub == 0)
 									<option value="{{ $mapel->id }},0">{{ $mapel->name }}</option>

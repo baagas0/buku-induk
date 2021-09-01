@@ -13,6 +13,7 @@ use App\{
     Nilai,
     Kelas,
 };
+use Auth;
 
 class NilaiController extends Controller
 {

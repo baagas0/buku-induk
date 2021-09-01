@@ -121,3 +121,10 @@
 	</ul>
 </div>
 </li>
+
+<li class="menu-item">
+	<a href="{{ route('master.setting') }}" class="menu-link">
+		<span class="menu-text">Pengaturan</span>
+		<i class="menu-arrow"></i>
+	</a>
+</li>

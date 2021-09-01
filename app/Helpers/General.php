@@ -1,4 +1,5 @@
 <?php
+use App\Setting;
 
 if (!function_exists('routeController')) {
 
@@ -67,5 +68,19 @@ if (!function_exists('th_pelajaran')) {
         $data['mulai']   = substr($year, 0, 4);
         $data['selesai'] = substr($year, -4);
         return $data;
+    }
+}
+
+if (!function_exists('setting')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function setting($slug)
+    {
+        return Setting::where('slug', $slug)->first()->value;
     }
 }

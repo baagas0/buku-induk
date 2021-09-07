@@ -17,7 +17,7 @@ class Master extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'master_role_id', 'background_image', 'name', 'email', 'password',
     ];
 
     /**
@@ -57,5 +57,10 @@ class Master extends Authenticatable
     public function sendEmailVerificationNotification()
     {
         $this->notify(new VerifyEmail);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo('App\MasterRole', 'master_role_id', 'id');
     }
 }

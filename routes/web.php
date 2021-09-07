@@ -23,3 +23,4 @@ Route::get('/', 'HomeController@index')->name('home');
 
 routeController('documentation', 'DocumentationController');
 routeController('upload', 'UploadController');
+routeController('pdf', 'PdfController');

@@ -38,7 +38,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	</head>
 	<!--end::Head-->
 	<!--begin::Body-->
-	<body id="kt_body" style="background-image: url({{ asset('assets/media/bg/bg-10.jpg') }})" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
+	<body id="kt_body" style="background-image: url({{ asset(Auth::guard('master')->user()->background_image) }})" class="quick-panel-right demo-panel-right offcanvas-right header-fixed subheader-enabled page-loading">
 		<!--begin::Main-->
 		<!--begin::Header Mobile-->
 		<div id="kt_header_mobile" class="header-mobile">
@@ -236,9 +236,9 @@ License: You must have a valid license purchased only from themeforest(the above
 					</div>
 					<div class="d-flex flex-column">
 						<a href="#" class="font-weight-bold font-size-h5 text-dark-75 text-hover-primary">{{ Auth::guard('master')->user()->name }}</a>
-						<div class="text-muted mt-1">Application Developer</div>
+						<div class="text-muted mt-1">{{ Auth::guard('master')->user()->role->name }}</div>
 						<div class="navi mt-2">
-							<a href="#" class="navi-item">
+							<a href="mailto:{{ Auth::guard('master')->user()->email }}" class="navi-item">
 								<span class="navi-link p-0 pb-2">
 									<span class="navi-icon mr-1">
 										<span class="svg-icon svg-icon-lg svg-icon-primary">

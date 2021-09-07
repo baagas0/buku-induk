@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class CreateMastersTable extends Migration
-{
+{ 
     /**
      * Run the migrations.
      *
@@ -15,8 +15,8 @@ class CreateMastersTable extends Migration
     {
         Schema::create('masters', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('master_role_id');
             $table->string('background_image')->default('assets/media/bg/bg-10.jpg');
+            $table->foreignId('role_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

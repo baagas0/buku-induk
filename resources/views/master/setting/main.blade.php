@@ -75,7 +75,7 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Favicon</label>
 								<div class="col-9">
-									<div class="image-input image-input-outline" id="logo_1">
+									<div class="image-input image-input-outline" id="favicon">
 										<div class="image-input-wrapper" style="background-image: url({{ asset(setting('favicon')) }})"></div>
 
 										<label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Ganti Favicon">
@@ -96,7 +96,7 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Logo</label>
 								<div class="col-9">
-									<div class="image-input image-input-outline" id="logo_1">
+									<div class="image-input image-input-outline" id="logo_l_1">
 										<div class="image-input-wrapper" style="background-image: url({{ asset(setting('logo_l_1')) }})"></div>
 
 										<label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Ganti Logo Utama">
@@ -110,12 +110,12 @@
 										</span>
 									</div>
 									<div class="image-input image-input-outline ml-5" id="logo_2">
-										<div class="image-input-wrapper" style="background-image: url({{ asset(setting('logo_l_2')) }})"></div>
+										<div class="image-input-wrapper" id="logo_l_2_view" style="background-image: url({{ asset(setting('logo_l_2')) }})"></div>
 
 										<label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Ganti Logo Minor">
 											<i class="fa fa-pen icon-sm text-muted"></i>
-											<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg"/>
-											<input type="hidden" name="profile_avatar_remove"/>
+											<input type="file" name="logo_l_2" id="logo_l_2" accept=".png, .jpg, .jpeg"/>
+											<input type="hidden" name="logo_l_2_remove"/>
 										</label>
 
 										<span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
@@ -181,16 +181,50 @@
 	// Class definition
 	var KTUserEdit = function () {
 		// Base elements
-		var avatar;
+		var avatar, favicon, logo_l_1, logo_l_2;
 
-		var initUserForm = function() {
-			avatar = new KTImageInput('logo_1');
+		var initForm = function() {
+			favicon = new KTImageInput('favicon');
+			logo_l_1 = new KTImageInput('logo_l_1');
+			logo_l_2 = new KTImageInput('logo_l_2');
+
+			$('#logo_l_2').on('change', function(e) {
+				console.log($(this)[0].files[0]);
+				e.preventDefault();
+
+				var formData = new FormData();
+				formData.append('slug', 'logo_l_2');
+				formData.append('image', $(this)[0].files[0]);
+
+
+				$.ajax({
+					type:'POST',
+					url: '{{ route('master.setting.update') }}',
+					data: formData,
+					cache:false,
+					contentType: false,
+					processData: false,
+					success:function(data){
+						toastr.success('Berhasil mengganti data Logo 2');
+						$('.logo-sticky').attr('src', data);
+						$('#logo_l_2_view').attr('style', 'background-image: url('+data+')')
+						toastr.warning('Gambar berhasil diterapkan');
+						console.log(data);
+					},
+					error: function(data){
+						alert("error");
+						console.log(data);
+					}
+				});
+			});
 		}
+
+
 
 		return {
 			// public functions
 			init: function() {
-				initUserForm();
+				initForm();
 			}
 		};
 	}();

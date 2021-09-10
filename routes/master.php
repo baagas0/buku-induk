@@ -1,11 +1,14 @@
 <?php
 
 Route::group(['middleware' => ['auth:master'],'namespace' => 'Master', 'as' => 'master.'], function() {
+    Route::get('/', 'HomeController@index')->name('home');
     routeController('mapel', 'Master\MapelController');
     routeController('student', 'Master\StudentController');
 
     routeController('kelulusan', 'Master\KelulusanController');
     routeController('hasil_ujian', 'Master\HasilUjianController');
+
+    routeController('e-rapor', 'Master\EraporController');
 
     routeController('setting', 'Master\SettingController');
 
@@ -17,7 +20,6 @@ Route::group(['middleware' => ['auth:master'],'namespace' => 'Master', 'as' => '
 
 Route::group(['namespace' => 'Master'], function() {
     // Dashboard
-    Route::get('/', 'HomeController@index')->name('master.home');
 
     // Login
     Route::get('login', 'Auth\LoginController@showLoginForm')->name('master.login');

@@ -16,7 +16,7 @@ class CreateMastersTable extends Migration
         Schema::create('masters', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('background_image')->default('assets/media/bg/bg-10.jpg');
-            $table->foreignId('role_id');
+            $table->foreignId('master_role_id');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();

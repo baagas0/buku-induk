@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Storage;
 use PDF;
 use App\{
     Kelas,
@@ -77,9 +78,15 @@ class PdfController extends Controller
         $data['kelompoks'] = Kelompok::with('mapel')->get();
         $data['student'] = $student;
 
-        $pdf = PDF::loadView('pdf.nilai.main', $data)->setPaper('A4');
+        // return view('pdf.nilai.try', $data);
+
+        $pdf = PDF::loadView('pdf.nilai.try', $data);
+        $pdf->setOption('page-width', '210');
+        $pdf->setOption('page-height', '330');
+
+        Storage::put('public/pdf/student/'.pdfName($nis), $pdf->output());
+
         return $pdf->download('Erapor - '.$student->name.'.pdf');
 
-        return view('pdf.nilai.main', $data);
     }
 }

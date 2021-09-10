@@ -1,19 +1,18 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>asd</title>
+<?php
+	$r_th = Request::get('tahun_pelajaran');
+?>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		{{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
-		<!--end::Fonts-->
-		<!--begin::Page Vendors Styles(used by this page)-->
-				<!--end::Page Vendors Styles-->
-		<!--begin::Global Theme Styles(used by all pages)-->
-		{{-- <link href="http://buku-induk.test/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" /> --}}
-		{{-- <link href="http://buku-induk.test/assets/plugins/custom/prismjs/prismjs.bundle.css" rel="stylesheet" type="text/css" /> --}}
-		<link href="http://buku-induk.test/assets/css/style.bundle.css" rel="stylesheet" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 
-	<style type="text/css">
+    <style type="text/css">
 		table { page-break-inside:auto!important }
 		tr    { page-break-inside:avoid!important; page-break-after:auto!important }
 		thead { display:table-header-group!important }
@@ -24,16 +23,13 @@
 		margin: 0;
 	}
 	body {
-		font-size: 12px;
+		font-family: Poppins;
+		font-size: 10px;
 	}
 
 	table, thead, th, tr, td {
-		line-height: 0.7!important;
+		line-height: 1!important;
 	}
-
-	/*.table {
-		page-break-inside: avoid;
-	}*/
 
 	.table thead tr th, 
 	.table tbody tr, 
@@ -41,17 +37,15 @@
 		max-height: 10px;
 		vertical-align: middle;
 	}
-	</style>
-</head>
-<body style="background: #ffffff!important;">
-<?php
-	$r_th = Request::get('tahun_pelajaran');
-?>
 
-		<!--begin::Card-->
+	.page {page-break-inside:avoid!important; page-break-after:auto!important};
+	</style>
+  </head>
+  <body>
+    <!--begin::Card-->
 
 		{{-- <center> --}}
-		<h3 class="card-label text-center">Capaian Hasil Belajar Peserta Didik</h3>
+		<b><h5 class="text-center">Capaian Hasil Belajar Peserta Didik</h5></b>
 		{{-- </center> --}}
 
 		<table class="" style="margin-left: 30px;">
@@ -59,11 +53,11 @@
 				<td style="line-height: 1.3!important;">Nama</td>
 				<td style="line-height: 1.3!important;"> : {{ $student->name }}</td>
 			</tr>
-			{{-- <tr>
+			<tr>
 				<td style="line-height: 1.3!important;">Nis</td>
 				<td style="line-height: 1.3!important;"> : {{ $student->nis }}</td>
 			</tr>
-			<tr>
+			{{-- <tr>
 				<td style="line-height: 1.3!important;">Tahun Pelajaran</td>
 				<td style="line-height: 1.3!important;"> : {{ $tahunpelajaran[0].'/'.$tahunpelajaran[count($tahunpelajaran) - 1 ] }}</td>
 			</tr> --}}
@@ -72,7 +66,7 @@
 		<!--
 			Nilai Pengetahuan, Praktik dan Sikap
 		-->
-		<fieldset class="" >
+		<fieldset class="mt-3" >
 			<p class="p-line-height"><b>I Nilai Pengetahuan, Praktik dan Sikap</b></p>
 			<!--begin: Datatable-->
 			
@@ -304,7 +298,7 @@
 			</table>
 			<!--end: Datatable-->
 		</fieldset>
-
+		<div style="height:0;page-break-after: always; margin:0; border-top:none;"></div>
 		<!--
 			Ketidakhadiran
 		-->
@@ -493,5 +487,6 @@
 			<!--end: Datatable-->
 		</fieldset>
 		<!--end::Card-->
-</body>
+  </body>
 </html>
+{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script> --}}

@@ -13,6 +13,13 @@
 </li>
 
 <li class="menu-item">
+	<a href="{{ route('master.e-rapor') }}" class="menu-link">
+		<span class="menu-text">E-rapor</span>
+		<i class="menu-arrow"></i>
+	</a>
+</li>
+
+<li class="menu-item">
 	<a href="{{ route('teacher.nilai.analisis') }}" class="menu-link">
 		<span class="menu-text">Hasil Ujian</span>
 		<i class="menu-arrow"></i>

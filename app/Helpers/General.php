@@ -55,6 +55,19 @@ if (!function_exists('routeController')) {
     }
 }
 
+if (!function_exists('pdfName')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function pdfName($nis)
+    {
+        return $nis.'-'.time().'.pdf';
+    }
+}
 if (!function_exists('th_pelajaran')) {
 
     /**

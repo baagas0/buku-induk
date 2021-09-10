@@ -48,25 +48,29 @@ class StudentController extends Controller
         $data['upd'] = Upd::get();
         $data['aspek'] = Aspek::get();
         $data['ketidakhadiran'] = Ketidakhadiran::get();
-// dd(11);
+        // dd(11);
         return view('master.student.main', $data);
     }
 
     public function postData(Request $req) {
         Paginator::currentPageResolver(fn() => $req->pagination['page']);
 
-        $filter = $req->all()['query'];
         $q = Student::with('kelas');
 
-        if ($filter) {
-            if (isset($filter['kelas_id'])) {
-                $q->where('kelas_id', $filter['kelas_id']);
+        if (isset($req->all()['query'])) {
+            $filter = $req->all()['query'];
+            if ($filter) {
+                if (isset($filter['kelas_id'])) {
+                    $q->where('kelas_id', $filter['kelas_id']);
+                }
+                if (isset($filter['like'])) {
+                    $q->where('name', 'like', '%'.$filter['like'].'%')
+                    ->orWhere('nis', 'like', '%'.$filter['like'].'%');
+                }
+                if (isset($filter['sort']['field']) && isset($filter['sort']['sort'])) {
+                    $q->orderBy($filter['sort']['field'], $filter['sort']['sort']);
+                }
             }
-            if (isset($filter['like'])) {
-                $q->where('name', 'like', '%'.$filter['like'].'%')
-                ->orWhere('nis', 'like', '%'.$filter['like'].'%');
-            }
-            $q->orderBy($filter['sort']['field'], $filter['sort']['sort']);
         }
         return new StudentResource($q->paginate(10));
     }

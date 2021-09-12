@@ -16,7 +16,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<!--begin::Head-->
 	<head><base href="">
 		<meta charset="utf-8" />
-		<title>Buku Induk - @stack('title')</title>
+		<title>{{ setting('app_name') }} - @stack('title')</title>
 		<meta name="description" content="Updates and statistics" />
 		<meta name="csrf-token" content="{{ csrf_token() }}" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />

@@ -97,3 +97,17 @@ if (!function_exists('setting')) {
         return Setting::where('slug', $slug)->first()->value;
     }
 }
+
+if (!function_exists('dataCount')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function dataCount($table)
+    {
+        return \DB::table($table)->count();
+    }
+}

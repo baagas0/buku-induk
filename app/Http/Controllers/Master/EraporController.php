@@ -14,6 +14,11 @@ use Illuminate\Pagination\Paginator;
 
 class EraporController extends Controller
 {
+    public function __construct()
+    {
+        return redirect()->route('master.home');
+    }
+
     public function getIndex() {
         $data['kelas'] = Kelas::get();
         return view('master.erapor.main', $data);

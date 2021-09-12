@@ -1,6 +1,19 @@
 @extends('master.layouts.app')
-@push('title', 'Teacher Dashboarda')
+@push('title', 'Master Dashboard')
 @section('content')
+
+
+<div class="alert alert-custom alert-notice alert-light-danger fade show" role="alert">
+    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+    <div class="alert-text">A simple primary alert—check it out!</div>
+    <div class="alert-close">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true"><i class="ki ki-close"></i></span>
+        </button>
+    </div>
+</div>
+
+
 <!--begin::Row-->
 <div class="row">
 	<div class="col-xl-4">
@@ -8,12 +21,7 @@
 		<div class="card card-custom gutter-b card-stretch">
 			<!--begin::Header-->
 			<div class="card-header border-0 pt-5">
-				<div class="card-title">
-					<div class="card-label">
-						<div class="font-weight-bolder">Weekly Sales Stats</div>
-						<div class="font-size-sm text-muted mt-2">890,344 Sales</div>
-					</div>
-				</div>
+				<h3 class="card-title font-weight-bolder">E-rapor Generator</h3>
 				<div class="card-toolbar">
 					<div class="dropdown dropdown-inline">
 						<a href="#" class="btn btn-clean btn-sm btn-icon" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -93,62 +101,14 @@
 			</div>
 			<!--end::Header-->
 			<!--begin::Body-->
-			<div class="card-body d-flex flex-column px-0">
-				<!--begin::Chart-->
-				<div id="kt_tiles_widget_1_chart" data-color="danger" style="height: 125px"></div>
-				<!--end::Chart-->
-				<!--begin::Items-->
-				<div class="flex-grow-1 card-spacer-x">
-					<!--begin::Item-->
-					<div class="d-flex align-items-center justify-content-between mb-10">
-						<div class="d-flex align-items-center mr-2">
-							<div class="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-								<div class="symbol-label">
-									<img src="{{ asset('assets/media/svg/misc/006-plurk.svg') }}" alt="" class="h-50" />
-								</div>
-							</div>
-							<div>
-								<a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Top Authors</a>
-								<div class="font-size-sm text-muted font-weight-bold mt-1">Ricky Hunt, Sandra Trepp</div>
-							</div>
-						</div>
-						<div class="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">+105$</div>
-					</div>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<div class="d-flex align-items-center justify-content-between mb-10">
-						<div class="d-flex align-items-center mr-2">
-							<div class="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-								<div class="symbol-label">
-									<img src="{{ asset('assets/media/svg/misc/015-telegram.svg') }}" alt="" class="h-50" />
-								</div>
-							</div>
-							<div>
-								<a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Bestsellers</a>
-								<div class="font-size-sm text-muted font-weight-bold mt-1">Pitstop Email Marketing</div>
-							</div>
-						</div>
-						<div class="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">+60$</div>
-					</div>
-					<!--end::Item-->
-					<!--begin::Item-->
-					<div class="d-flex align-items-center justify-content-between">
-						<div class="d-flex align-items-center mr-2">
-							<div class="symbol symbol-50 symbol-light mr-3 flex-shrink-0">
-								<div class="symbol-label">
-									<img src="{{ asset('assets/media/svg/misc/003-puzzle.svg') }}" alt="" class="h-50" />
-								</div>
-							</div>
-							<div>
-								<a href="#" class="font-size-h6 text-dark-75 text-hover-primary font-weight-bolder">Top Engagement</a>
-								<div class="font-size-sm text-muted font-weight-bold mt-1">KT.com solution provider</div>
-							</div>
-						</div>
-						<div class="label label-light label-inline font-weight-bold text-dark-50 py-4 px-3 font-size-base">+75$</div>
-					</div>
-					<!--end::Item-->
+			<div class="card-body d-flex flex-column">
+				<div class="flex-grow-1">
+					<div id="success_presentation_rpdf_chart" style="height: 200px"></div>
 				</div>
-				<!--end::Items-->
+				<div class="pt-5">
+					<p class="text-center font-weight-normal font-size-lg pb-7">Catatan: Angka diatas menunjukan presentasi keberhasilan dalam proses pembuatan E-rapor PDF</p>
+					<a href="{{ route('master.e-rapor') }}" class="btn btn-success btn-shadow-hover font-weight-bolder w-100 py-3">Generate E-rapor</a>
+				</div>
 			</div>
 			<!--end::Body-->
 		</div>
@@ -162,7 +122,7 @@
 					<!--begin::Body-->
 					<div class="card-body d-flex flex-column">
 						<!--begin::Title-->
-						<a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">Properties</a>
+						<a href="#" class="text-dark-75 text-hover-primary font-weight-bolder font-size-h3">{{ setting('app_name') }}</a>
 						<!--end::Title-->
 					</div>
 					<!--end::Body-->
@@ -175,8 +135,8 @@
 					<!--begin::Body-->
 					<div class="card-body d-flex align-items-center justify-content-between flex-wrap">
 						<div class="mr-2">
-							<h3 class="font-weight-bolder">Create CRM Reports</h3>
-							<div class="text-dark-50 font-size-lg mt-2">Generate the latest CRM Report</div>
+							<h3 class="font-weight-bolder">Set Up Website</h3>
+							<div class="text-dark-50 font-size-lg mt-2">Sesuaikan Pengaturan Platform Anda</div>
 						</div>
 						<a href="#" class="btn btn-primary font-weight-bold py-3 px-6">Start Now</a>
 					</div>
@@ -192,9 +152,9 @@
 					<!--begin::Body-->
 					<div class="card-body d-flex align-items-center">
 						<div>
-							<h3 class="text-white font-weight-bolder line-height-lg mb-5">Create SaaS
-							<br />Based Reports</h3>
-							<a href='#' class="btn btn-success font-weight-bold px-6 py-3">Create Report</a>
+							<h3 class="text-white font-weight-bolder line-height-lg mb-5">Lihat Data
+								<br>Peserta Didik</h3>
+							<a href='{{ route('master.student') }}' class="btn btn-success font-weight-bold px-6 py-3">Klik Disini</a>
 						</div>
 					</div>
 					<!--end::Body-->
@@ -216,8 +176,8 @@
 									</svg>
 									<!--end::Svg Icon-->
 								</span>
-								<div class="text-inverse-primary font-weight-bolder font-size-h2 mt-3">790</div>
-								<a href="#" class="text-inverse-primary font-weight-bold font-size-lg mt-1">New Products</a>
+								<div class="text-inverse-primary font-weight-bolder font-size-h2 mt-3">{{ dataCount('rapor_pdf_exports') }}</div>
+								<a href="#" class="text-inverse-primary font-weight-bold font-size-lg mt-1">Data E-rapor</a>
 							</div>
 						</div>
 						<!--end::Tiles Widget 11-->
@@ -237,8 +197,8 @@
 									</svg>
 									<!--end::Svg Icon-->
 								</span>
-								<div class="text-dark font-weight-bolder font-size-h2 mt-3">8,600</div>
-								<a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">New Customers</a>
+								<div class="text-dark font-weight-bolder font-size-h2 mt-3">{{ dataCount('students') }}</div>
+								<a href="#" class="text-muted text-hover-primary font-weight-bold font-size-lg mt-1">Peserta Didik</a>
 							</div>
 						</div>
 						<!--end::Tiles Widget 12-->
@@ -251,10 +211,10 @@
 					<!--begin::Body-->
 					<div class="card-body d-flex flex-column align-items-start justify-content-start">
 						<div class="p-1 flex-grow-1">
-							<h3 class="text-white font-weight-bolder line-height-lg mb-5">Create Reports
-							<br />With App</h3>
+							<h3 class="text-white font-weight-bolder line-height-lg mb-5">Buat Data
+							<br />E-rapor Otomatis</h3>
 						</div>
-						<a href='#' class="btn btn-link btn-link-warning font-weight-bold">Create Report
+						<a href='{{ route('master.e-rapor') }}' class="btn btn-link btn-link-warning font-weight-bold">Buat Sekarang
 						<span class="svg-icon svg-icon-lg svg-icon-warning">
 							<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg') }}-->
 							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -1354,3 +1314,78 @@
 </div>
 <!--end::Row-->
 @endsection
+@push('js')
+<script type="text/javascript">
+	'use strict';
+// Class definition
+
+var KTDefaultDatatableDemo = function() {
+	
+	var success_presentation_rpdf = function () {
+        var element = document.getElementById("success_presentation_rpdf_chart");
+        var height = parseInt(KTUtil.css(element, 'height'));
+
+        if (!element) {
+            return;
+        }
+
+        var options = {
+            series: [{{ $success_presentation_rpdf }}],
+            chart: {
+                height: height,
+                type: 'radialBar',
+            },
+            plotOptions: {
+                radialBar: {
+                    hollow: {
+                        margin: 0,
+                        size: "65%"
+                    },
+                    dataLabels: {
+                        showOn: "always",
+                        name: {
+                            show: false,
+                            fontWeight: '700'
+                        },
+                        value: {
+                            color: KTApp.getSettings()['colors']['gray']['gray-700'],
+                            fontSize: "30px",
+                            fontWeight: '700',
+                            offsetY: 12,
+                            show: true,
+                            formatter: function (val) {
+                                return val + '%';
+                            }
+                        }
+                    },
+                    track: {
+                        background: KTApp.getSettings()['colors']['theme']['light']['success'],
+                        strokeWidth: '100%'
+                    }
+                }
+            },
+            colors: [KTApp.getSettings()['colors']['theme']['base']['success']],
+            stroke: {
+                lineCap: "round",
+            },
+            labels: ["Progress"]
+        };
+
+        var chart = new ApexCharts(element, options);
+        chart.render();
+    }
+
+	return {
+		// public functions
+		init: function() {
+			success_presentation_rpdf();
+		},
+	};
+}();
+
+jQuery(document).ready(function() {
+	KTDefaultDatatableDemo.init();
+});
+
+</script>
+@endpush

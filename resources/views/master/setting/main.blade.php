@@ -75,12 +75,12 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Favicon</label>
 								<div class="col-9">
-									<div class="image-input image-input-outline" id="favicon">
-										<div class="image-input-wrapper" style="background-image: url({{ asset(setting('favicon')) }})"></div>
+									<div class="image-input image-input-outline" id="favicon1">
+										<div class="image-input-wrapper" id="favicon_view" style="background-image: url({{ asset(setting('favicon')) }})"></div>
 
 										<label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Ganti Favicon">
 											<i class="fa fa-pen icon-sm text-muted"></i>
-											<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg"/>
+											<input type="file" name="profile_avatar" id="favicon" accept=".png, .jpg, .jpeg"/>
 											<input type="hidden" name="profile_avatar_remove"/>
 										</label>
 
@@ -96,13 +96,13 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Logo</label>
 								<div class="col-9">
-									<div class="image-input image-input-outline" id="logo_l_1">
-										<div class="image-input-wrapper" style="background-image: url({{ asset(setting('logo_l_1')) }})"></div>
+									<div class="image-input image-input-outline" id="logo_1">
+										<div class="image-input-wrapper" id="logo_l_1_view" style="background-image: url({{ asset(setting('logo_l_1')) }})"></div>
 
 										<label class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="change" data-toggle="tooltip" title="" data-original-title="Ganti Logo Utama">
 											<i class="fa fa-pen icon-sm text-muted"></i>
-											<input type="file" name="profile_avatar" accept=".png, .jpg, .jpeg"/>
-											<input type="hidden" name="profile_avatar_remove"/>
+											<input type="file" name="logo_l_1" id="logo_l_1" accept=".png, .jpg, .jpeg"/>
+											<input type="hidden" name="logo_l_1_remove"/>
 										</label>
 
 										<span class="btn btn-xs btn-icon btn-circle btn-white btn-hover-text-primary btn-shadow" data-action="cancel" data-toggle="tooltip" title="Cancel avatar">
@@ -129,19 +129,26 @@
 							<!--begin::Group-->
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Applikasi</label>
-								<div class="col-9">
-									<input class="form-control form-control-lg form-control-solid" type="text" value="Buku Induk" />
+								<div class="col-9 input-group qs">
+										<input type="text" id="text1" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{ setting('app_name') }}"/>
+										<div class="input-group-append">
+											<button class="btn btn-primary" id="buttonqw" style="display: none" type="button">Go!</button>
+										</div>
 								</div>
 							</div>
 							<!--end::Group-->
 							<!--begin::Group-->
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Sekolahan</label>
-								<div class="col-9">
-									<input class="form-control form-control-lg form-control-solid" type="text" value="SMK Wikrama 1 Jepara" />
+								<div class="col-9 input-group qs">
+										<input type="text" id="text2" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{setting('school_name')}}"/>
+										<div class="input-group-append">
+											<button class="btn btn-primary" id="buttonqs" style="display: none" type="button">Go!</button>
+										</div>
 								</div>
 							</div>
 							<!--end::Group-->
+
 						</div>
 					</div>
 					<!--end::Row-->
@@ -149,20 +156,7 @@
 				<!--end::Tab-->
 			</div>
 			<!--begin::Footer-->
-			<div class="card-footer pb-0">
-				<div class="row">
-					<div class="col-xl-2"></div>
-					<div class="col-xl-7">
-						<div class="row">
-							<div class="col-3"></div>
-							<div class="col-9">
-								<a href="#" class="btn btn-light-primary font-weight-bold">Save changes</a>
-								<a href="#" class="btn btn-clean font-weight-bold">Cancel</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+			
 			<!--end::Footer-->
 		</form>
 	</div>
@@ -176,18 +170,85 @@
 @endpush
 @push('js')
 <script>
+	$( '#text1' ).click(function() {
+		console.log('asdasd')
+	  $( '#buttonqw' ).toggle();
+	});
+	$( '#text2' ).click(function() {
+		console.log('asdasd')
+	  $( '#buttonqs' ).toggle();
+	});
 	"use strict";
 
 	// Class definition
 	var KTUserEdit = function () {
 		// Base elements
-		var avatar, favicon, logo_l_1, logo_l_2;
+		var avatar, favicon, logo_l_1, logo_l_2, text1, text2;
 
 		var initForm = function() {
 			favicon = new KTImageInput('favicon');
 			logo_l_1 = new KTImageInput('logo_l_1');
 			logo_l_2 = new KTImageInput('logo_l_2');
 
+			$('#favicon').on('change', function(e) {
+				console.log($(this)[0].files[0]);
+				e.preventDefault();
+
+				var formData = new FormData();
+				formData.append('slug', 'favicon');
+				formData.append('image', $(this)[0].files[0]);
+
+
+				$.ajax({
+					type:'POST',
+					url: '{{ route('master.setting.update') }}',
+					data: formData,
+					cache:false,
+					contentType: false,
+					processData: false,
+					success:function(data){
+						toastr.success('Berhasil mengganti data Logo 1');
+						$('.logo-sticky').attr('src', data);
+						$('#favicon_view').attr('style', 'background-image: url('+data+')')
+						toastr.warning('Gambar berhasil diterapkan');
+						console.log(data);
+					},
+					error: function(data){
+						alert("error");
+						console.log(data);
+					}
+				});
+			});
+
+			$('#logo_l_1').on('change', function(e) {
+				console.log($(this)[0].files[0]);
+				e.preventDefault();
+
+				var formData = new FormData();
+				formData.append('slug', 'logo_l_1');
+				formData.append('image', $(this)[0].files[0]);
+
+
+				$.ajax({
+					type:'POST',
+					url: '{{ route('master.setting.update') }}',
+					data: formData,
+					cache:false,
+					contentType: false,
+					processData: false,
+					success:function(data){
+						toastr.success('Berhasil mengganti data Logo 1');
+						$('.logo-sticky').attr('src', data);
+						$('#logo_l_1_view').attr('style', 'background-image: url('+data+')')
+						toastr.warning('Gambar berhasil diterapkan');
+						console.log(data);
+					},
+					error: function(data){
+						alert("error");
+						console.log(data);
+					}
+				});
+			});
 			$('#logo_l_2').on('change', function(e) {
 				console.log($(this)[0].files[0]);
 				e.preventDefault();
@@ -217,10 +278,38 @@
 					}
 				});
 			});
+
+			$('#buttonqw').on('click', function(e) {
+				console.log($('#text1'));
+				e.preventDefault();
+
+				var formData = new FormData();
+				formData.append('slug', 'app_name');
+				formData.append('text', $('#text1'));
+
+
+				$.ajax({
+					type:'POST',
+					url: '{{ route('master.setting.update') }}',
+					data: formData,
+					cache:false,
+					dataType: "JSON",
+            		context : '#text1',
+					processData: false,
+					success:function(data){
+						toastr.success('Berhasil mengganti data Logo 2');
+						$('.logo-sticky').attr('src', data);
+						$('#logo_l_2_view').attr('style', 'background-image: url('+data+')')
+						toastr.warning('Gambar berhasil diterapkan');
+						console.log(data);
+					},
+					error: function(data){
+						alert("error");
+						console.log(data);
+					}
+				});
+			});
 		}
-
-
-
 		return {
 			// public functions
 			init: function() {

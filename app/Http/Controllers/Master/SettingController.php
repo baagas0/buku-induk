@@ -18,7 +18,7 @@ class SettingController extends Controller
         $type = 'text';
         $return = '';
 
-        if ($slug == 'favicon' || $slug == 'logo_l_1' || $slug == 'logo_l_2') {
+        if ($slug == 'favicon' || $slug == 'logo_l_1' || $slug == 'logo_l_2' || $slug == 'app_name' || $slug == 'school_name') {
             $type = 'image';
         }
 
@@ -35,6 +35,16 @@ class SettingController extends Controller
                 return 'failed';
             }
         }
+        if ($type = 'text') {
+            $text = $req->json_encode($value);
+           
+            if ($req) {
+                $return = $req->json_encode($value);
+            }else {
+                return 'failed';
+            }
+        }
+
 
         $data = Setting::where('slug', $slug)->update([
             'value' => $value,

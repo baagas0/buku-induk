@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use App\Jobs\MultiPdfGenerate;
+use Auth;
 
 class RaporPdfExport extends Model
 {
@@ -13,15 +14,22 @@ class RaporPdfExport extends Model
         'kelas_id',
         'th_pelajaran',
         'status',
+        'created_by',
     ];
     protected $appends = [
         'progress',
         'state',
+        'htmlStatus',
     ];
 
     public function getProgressAttribute(){
         $on_going_job   = $this->on_going_job;
         $count_job      = $this->count_job;
+
+        if ($this->status == 'pending') {
+            return 5;
+        }
+
         if ($on_going_job== 0 || $count_job== 0) {
             return 0;
         }
@@ -45,9 +53,26 @@ class RaporPdfExport extends Model
         return $return;
     }
 
+    public function gethtmlStatusAttribute(){
+        $s = $this->status;
+        $state = [
+            'pending'   => ['title' => 'Pending',       'state' => 'warning'],
+            'proccess'  => ['title' => 'On Proccess',   'state' => 'info'],
+            'success'   => ['title' => 'Success',       'state' => 'success'],
+            'error'     => ['title' => 'error',         'state' => 'danger'],
+        ];
+
+        return '<span class="label label-' .$state[$s]['state']. ' label-dot mr-2"></span><span class="font-weight-bold text-' .$state[$s]['state'].
+                            '">' .$state[$s]['title']. '</span>';
+    }
+
     public function kelas()
     {
         return $this->hasOne('App\Kelas', 'id', 'kelas_id');
+    }
+    public function user()
+    {
+        return $this->hasOne('App\Master', 'id', 'created_by');
     }
 
     public static function getToken(){
@@ -71,6 +96,7 @@ class RaporPdfExport extends Model
 
         static::creating(function ($model){
             $model->token = RaporPdfExport::getToken();
+            $model->created_by = Auth::guard('master')->user() ? Auth::guard('master')->user()->id : 1;
 
             $data['token'] = $model->token;
             $data['kelas_id'] = $model->kelas_id;

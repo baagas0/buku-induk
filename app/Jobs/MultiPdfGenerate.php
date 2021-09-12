@@ -24,7 +24,7 @@ use App\{
     Kelulusan,
     Kelompok,
     RaporPdfExport,
-    HistoryRaporPdfExport,
+    RaporPdfExportHistory,
 };
 use DB;
 
@@ -56,6 +56,13 @@ class MultiPdfGenerate implements ShouldQueue
         $token = $this->data['token'];
         $data['tahunpelajaran'] = json_decode($dataPdf['th_pelajaran']);
         $students = Student::where('kelas_id', $dataPdf['kelas_id'])->get();
+        
+        $RaporPdfExport = RaporPdfExport::where('token', $token)->first();
+        RaporPdfExportHistory::create([
+            'rapor_pdf_exports_id' => $RaporPdfExport->id,
+            'title' => 'Perintah pembuatan data e-rapor',
+            'type' => 'alert',
+        ]);
 
         $this->RaporPdfData([
             'status' => 'proccess',
@@ -97,13 +104,44 @@ class MultiPdfGenerate implements ShouldQueue
             $pdf->setOption('page-width', '210');
             $pdf->setOption('page-height', '330');
 
-            Storage::put('public/pdf/'.$token.'/'.$student->nis.'.pdf', $pdf->output());
+            Storage::put('public/pdf/'.$token.'/'.$student->nis.' - '.$student->name.'.pdf', $pdf->output());
 
+            RaporPdfExportHistory::create([
+                'rapor_pdf_exports_id' => $RaporPdfExport->id,
+                'student_id' => $student->id,
+                'title' => 'Membuat E-rapor PDF',
+                'type' => 'student',
+            ]);
         }
 
         $statusData = RaporPdfExport::where('token', $token)->first();
         $statusData->update([
             'status' => 'success'
+        ]);
+        RaporPdfExportHistory::create([
+            'rapor_pdf_exports_id' => $RaporPdfExport->id,
+            'title' => 'Pembuatan data e-rapor selesai',
+            'type' => 'alert',
+        ]);
+    }
+
+    /**
+     * Handle a job failure.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    public function failed(\Throwable  $exception) {
+        $RaporPdfExport = RaporPdfExport::where('token', $this->data['token'])->first();
+
+        RaporPdfExportHistory::create([
+            'rapor_pdf_exports_id' => $RaporPdfExport->id,
+            'title' => 'Proses Pembuatan PDF Gagal',
+            'type' => 'alert',
+        ]);
+
+        $RaporPdfExport->update([
+            'status' => 'error'
         ]);
     }
 

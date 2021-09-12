@@ -24,6 +24,30 @@ use DB;
 
 class PdfController extends Controller
 {
+    public function getZip(){
+        $zip_file = 'try1.zip';
+        $zip = new \ZipArchive();
+        $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+        $path = storage_path('app\public\pdf\22XBT6LZ');
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        foreach ($files as $name => $file)
+        {
+            // We're skipping all subfolders
+            if (!$file->isDir()) {
+                $filePath     = $file->getRealPath();
+                // dd($filePath);
+                // extracting filename with substr/strlen
+                $relativePath =  substr($filePath, strlen($path) + 1);
+
+                $zip->addFile($filePath, $relativePath);
+            }
+        }
+        $zip->close();
+        return response()->download($zip_file);
+    }
+
+
     public function getSingle($nis = 11800659, Request $request) {
         $year = $request->get('tahun_pelajaran');
 

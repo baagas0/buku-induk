@@ -18,6 +18,7 @@ class EraporPdfSeeder extends Seeder
         RaporPdfExport::create([
             'kelas_id'      => 1,
             'th_pelajaran'  => json_encode(['2019']),
+            'created_by'    => 1,
         ]);
     }
 }

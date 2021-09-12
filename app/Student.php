@@ -63,4 +63,34 @@ class Student extends Authenticatable
     {
         return $this->hasOne('App\Kelas', 'id', 'kelas_id');
     }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::created(function ($model){
+            Kelulusan::create([
+                'student_id'=> $model->id,
+                'uraian'    => 'Nomor',
+                'ijazah'    => null,
+                'skhun'     => null,
+                'shuambn'   => null,
+            ]);
+
+            Kelulusan::create([
+                'student_id'=> $model->id,
+                'uraian'    => 'Penanggalan',
+                'ijazah'    => null,
+                'skhun'     => null,
+                'shuambn'   => null,
+            ]);
+
+            Kelulusan::create([
+                'student_id'=> $model->id,
+                'uraian'    => 'Diberikan Tanggal',
+                'ijazah'    => null,
+                'skhun'     => null,
+                'shuambn'   => null,
+            ]);
+        });
+    }
 }

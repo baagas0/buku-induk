@@ -18,11 +18,13 @@ class SettingController extends Controller
         $type = 'text';
         $return = '';
 
-        if ($slug == 'favicon' || $slug == 'logo_l_1' || $slug == 'logo_l_2' || $slug == 'app_name' || $slug == 'school_name') {
+        if ($slug == 'favicon' || $slug == 'logo_l_1' || $slug == 'logo_l_2') {
             $type = 'image';
         }
 
-        if ($type = 'image') {
+        // return $type;
+
+        if ($type == 'image') {
             $image = $req->file('image');
             $path = 'public/media/setting/';
             Storage::disk('local')->makeDirectory($path);
@@ -34,15 +36,9 @@ class SettingController extends Controller
             }else {
                 return 'failed';
             }
-        }
-        if ($type = 'text') {
-            $text = $req->json_encode($value);
-           
-            if ($req) {
-                $return = $req->json_encode($value);
-            }else {
-                return 'failed';
-            }
+        }else if ($type == 'text') {
+            $value = $req->value;
+            $return = 'Data berhasil diupdate';
         }
 
 

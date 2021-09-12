@@ -130,9 +130,9 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Applikasi</label>
 								<div class="col-9 input-group qs">
-										<input type="text" id="text1" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{ setting('app_name') }}"/>
+										<input type="text" id="app_name" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{ setting('app_name') }}"/>
 										<div class="input-group-append">
-											<button class="btn btn-primary" id="buttonqw" style="display: none" type="button">Go!</button>
+											<button class="btn btn-primary" id="app_name_button" style="display: none" type="button">Ganti</button>
 										</div>
 								</div>
 							</div>
@@ -141,9 +141,9 @@
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Sekolahan</label>
 								<div class="col-9 input-group qs">
-										<input type="text" id="text2" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{setting('school_name')}}"/>
+										<input type="text" id="school_name" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{setting('school_name')}}"/>
 										<div class="input-group-append">
-											<button class="btn btn-primary" id="buttonqs" style="display: none" type="button">Go!</button>
+											<button class="btn btn-primary" id="school_name_button" style="display: none" type="button">Ganti</button>
 										</div>
 								</div>
 							</div>
@@ -170,20 +170,12 @@
 @endpush
 @push('js')
 <script>
-	$( '#text1' ).click(function() {
-		console.log('asdasd')
-	  $( '#buttonqw' ).toggle();
-	});
-	$( '#text2' ).click(function() {
-		console.log('asdasd')
-	  $( '#buttonqs' ).toggle();
-	});
 	"use strict";
 
 	// Class definition
 	var KTUserEdit = function () {
 		// Base elements
-		var avatar, favicon, logo_l_1, logo_l_2, text1, text2;
+		var avatar, favicon, logo_l_1, logo_l_2;
 
 		var initForm = function() {
 			favicon = new KTImageInput('favicon');
@@ -219,7 +211,6 @@
 					}
 				});
 			});
-
 			$('#logo_l_1').on('change', function(e) {
 				console.log($(this)[0].files[0]);
 				e.preventDefault();
@@ -279,36 +270,45 @@
 				});
 			});
 
-			$('#buttonqw').on('click', function(e) {
-				console.log($('#text1'));
-				e.preventDefault();
-
+			$( '#app_name' ).on('focus', function() {
+				$( '#app_name_button' ).show();
+			});
+			$( '#app_name_button' ).click(function() {
 				var formData = new FormData();
 				formData.append('slug', 'app_name');
-				formData.append('text', $('#text1'));
+				formData.append('value', $( '#app_name' ).val());
 
+				updateData(formData);
+			});
 
+			$( '#school_name' ).on('focus', function() {
+				$( '#school_name_button' ).show();
+			});
+			$( '#school_name_button' ).click(function() {
+				var formData = new FormData();
+				formData.append('slug', 'school_name');
+				formData.append('value', $( '#school_name' ).val());
+
+				updateData(formData);
+			});
+
+			function updateData(data) {
 				$.ajax({
 					type:'POST',
 					url: '{{ route('master.setting.update') }}',
-					data: formData,
+					data: data,
 					cache:false,
-					dataType: "JSON",
-            		context : '#text1',
+					contentType: false,
 					processData: false,
 					success:function(data){
-						toastr.success('Berhasil mengganti data Logo 2');
-						$('.logo-sticky').attr('src', data);
-						$('#logo_l_2_view').attr('style', 'background-image: url('+data+')')
-						toastr.warning('Gambar berhasil diterapkan');
-						console.log(data);
+						toastr.success(data);
 					},
 					error: function(data){
 						alert("error");
 						console.log(data);
 					}
 				});
-			});
+			}
 		}
 		return {
 			// public functions

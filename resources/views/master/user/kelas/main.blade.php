@@ -75,7 +75,7 @@
 					</div>
 					<!--end::Dropdown-->
 					<!--begin::Button-->
-					<a href="{{route('master.user.master.crete')}}" class="btn btn-primary font-weight-bolder">
+					<a href="{{route('master.user.kelas.create')}}" class="btn btn-primary font-weight-bolder">
 						<span class="svg-icon svg-icon-md">
 							<!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
 							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -96,21 +96,17 @@
 						<thead>
 							<tr>
 								<th>ID</th>
-								<th>Role ID</th>
 								<th>Name</th>
-								<th>Email</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							@foreach($master as $row)
+							@foreach($kelas as $row)
 							<tr>
 								<td>{{$loop->iteration}}</td>
-								<td>{{$row->role_id}}</td>
 								<td>{{$row->name}}</td>
-								<td>{{$row->email}}</td>
 								<td>
-									<a href="#" id="edit" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">
+									<a href="{{route('master.user.kelas.edit',$row->id)}}" id="edit" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">
 	                            <span class="svg-icon svg-icon-md">
 	                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 	                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -121,7 +117,7 @@
 	                                </svg>
 	                            </span>
 	                        </a>
-	                        <a href="#" class="btn btn-sm btn-clean btn-icon" title="Delete">
+	                        <a href="{{route('master.user.kelas.delete',$row->id)}}" class="btn btn-sm btn-clean btn-icon" title="Delete">
 	                            <span class="svg-icon svg-icon-md">
 	                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
 	                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">

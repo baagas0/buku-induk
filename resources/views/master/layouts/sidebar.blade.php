@@ -110,21 +110,34 @@
 					<span class="menu-text">Guru</span>
 				</a>
 			</li>
-			
-		<li class="menu-item">
-			<a href="{{ route('master.user.master') }}" class="menu-link">
-				<span class="svg-icon menu-icon">
-					<!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo2\dist/../src/media/svg/icons\Design\Cap-3.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-						<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-							<rect x="0" y="0" width="24" height="24"/>
-							<path d="M13,19 L13,15.8999819 C15.2822403,15.4367116 17,13.4189579 17,11 C17,8.23857625 14.7614237,6 12,6 C9.23857625,6 7,8.23857625 7,11 C7,13.4189579 8.71775968,15.4367116 11,15.8999819 L11,19 L4,19 L4,12 C4,7.581722 7.581722,4 12,4 C16.418278,4 20,7.581722 20,12 L20,19 L13,19 Z" fill="#000000"/>
-							<circle fill="#000000" opacity="0.3" cx="12" cy="11" r="2"/>
-						</g>
-					</svg><!--end::Svg Icon-->
-				</span>
-				<span class="menu-text">Karyawan</span>
-			</a>
-		</li>
+			<li class="menu-item">
+				<a href="{{ route('master.user.kelas') }}" class="menu-link">
+					<span class="svg-icon menu-icon">
+						<!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo2\dist/../src/media/svg/icons\Design\Join-1.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+							<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect x="0" y="0" width="24" height="24"/>
+								<path d="M9,10 L9,19 L5,19 L5,10 L5,6 L18,6 L18,10 L9,10 Z" fill="#000000" transform="translate(11.500000, 12.500000) scale(-1, 1) translate(-11.500000, -12.500000) "/>
+								<circle fill="#000000" opacity="0.3" cx="8" cy="16" r="2"/>
+							</g>
+						</svg><!--end::Svg Icon-->
+					</span>
+					<span class="menu-text">Kelas</span>
+				</a>
+			</li>
+			<li class="menu-item">
+				<a href="{{ route('master.user.master') }}" class="menu-link">
+					<span class="svg-icon menu-icon">
+						<!--begin::Svg Icon | path:C:\wamp64\www\keenthemes\legacy\metronic\theme\html\demo2\dist/../src/media/svg/icons\Design\Cap-3.svg--><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+							<g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+								<rect x="0" y="0" width="24" height="24"/>
+								<path d="M13,19 L13,15.8999819 C15.2822403,15.4367116 17,13.4189579 17,11 C17,8.23857625 14.7614237,6 12,6 C9.23857625,6 7,8.23857625 7,11 C7,13.4189579 8.71775968,15.4367116 11,15.8999819 L11,19 L4,19 L4,12 C4,7.581722 7.581722,4 12,4 C16.418278,4 20,7.581722 20,12 L20,19 L13,19 Z" fill="#000000"/>
+								<circle fill="#000000" opacity="0.3" cx="12" cy="11" r="2"/>
+							</g>
+						</svg><!--end::Svg Icon-->
+					</span>
+					<span class="menu-text">Karyawan</span>
+				</a>
+			</li>
 	</ul>
 </div>
 </li>

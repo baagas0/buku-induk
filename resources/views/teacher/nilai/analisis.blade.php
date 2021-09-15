@@ -353,7 +353,7 @@ $kelas_id = Request::get('kelas_id');
 		}
 		var dropzone = function() {
 			$('#file').dropzone({
-				url: "{{ route('teacher.nilai.upload') }}",
+				url: "{{ route('upload.file') }}",
 				headers: {
 					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 				},

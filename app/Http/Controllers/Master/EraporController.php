@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Routing\Redirector;
 use Illuminate\Http\Request;
 use App\Http\Resources\{RaporPdfResource, TeacherResource};
+use Auth;
 use App\{
     Kelas,
     RaporPdfExport,
@@ -14,12 +16,21 @@ use Illuminate\Pagination\Paginator;
 
 class EraporController extends Controller
 {
-    public function __construct()
+    public function __construct(Redirector $redirect)
     {
-        return redirect()->route('master.home');
+        $this->user = '';
+        // dd($this->user);
     }
 
     public function getIndex() {
+
+        if (checkGuard('Waka Kurikulum') == false) {
+            return redirect()->route('master.home')->with([
+                'type' => 'danger',
+                'msg' => 'Ooops.., Anda tidak memiliki akses kesini'
+            ]);
+        }
+
         $data['kelas'] = Kelas::get();
         return view('master.erapor.main', $data);
     }

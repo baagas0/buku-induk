@@ -54,6 +54,27 @@ if (!function_exists('routeController')) {
         }
     }
 }
+if (!function_exists('checkGuard')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function checkGuard($roleName, $guard = 'master')
+    {
+        $user = auth()->guard($guard)->user();
+
+        $role = $user->role->name;
+        
+        if ($role == $roleName) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+}
 
 if (!function_exists('pdfName')) {
 

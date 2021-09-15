@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => ['auth:master'],'namespace' => 'Master', 'as' => 'master.'], function() {
+Route::group(['middleware' => 'auth:master','namespace' => 'Master', 'as' => 'master.'], function() {
     Route::get('/', 'HomeController@index')->name('home');
     routeController('mapel', 'Master\MapelController');
     routeController('student', 'Master\StudentController');

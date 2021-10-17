@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\RaporPdfExport;
 use Auth;
 
 class HomeController extends Controller
@@ -22,8 +23,15 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index() {
-        // dd(Auth::guard('teacher')->user());
-        return view('teacher.dashboard');
+    public function index()
+    {
+        $rpdf = RaporPdfExport::get();
+
+        $count_job = $rpdf->sum('count_job');
+        $on_going_job = $rpdf->sum('on_going_job');
+
+        $data['success_presentation_rpdf'] = ($on_going_job / $count_job) * 100;
+
+        return view('teacher.dashboard', $data);
     }
 }

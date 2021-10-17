@@ -12,19 +12,23 @@
 	</a>
 </li>
 
+@if(auth()->user()->role->name == 'Waka Kurikulum')
 <li class="menu-item">
-	<a href="{{ route('master.e-rapor') }}" class="menu-link">
-		<span class="menu-text">E-rapor</span>
+	<a href="{{ route('master.pdf') }}" class="menu-link">
+		<span class="menu-text">PDF</span>
 		<i class="menu-arrow"></i>
 	</a>
 </li>
+@endif
 
-<li class="menu-item">
-	<a href="{{ route('teacher.nilai.analisis') }}" class="menu-link">
+@if(auth()->user()->role->name == 'Tata Usaha')
+{{-- <li class="menu-item">
+	<a href="{{ route('master.hasil_ujian') }}" class="menu-link">
 		<span class="menu-text">Hasil Ujian</span>
 		<i class="menu-arrow"></i>
 	</a>
-</li>
+</li> --}}
+@endif
 
 <li class="menu-item">
 	<a href="{{ route('master.mapel') }}" class="menu-link">
@@ -32,7 +36,7 @@
 		<i class="menu-arrow"></i>
 	</a>
 </li>
-
+@if(auth()->user()->role->name == 'Tata Usaha')
 <li class="menu-item menu-item-submenu menu-item-rel" data-menu-toggle="click" aria-haspopup="true">
 	<a href="javascript:;" class="menu-link menu-toggle">
 		<span class="menu-text">Master</span>
@@ -52,10 +56,10 @@
 							</g>
 						</svg><!--end::Svg Icon-->
 					</span>
-					<span class="menu-text">Data Siswa</span>
+					<span class="menu-text">Export Data Siswa</span>
 				</a>
 			</li>
-			
+
 		<li class="menu-item">
 			<a href="{{ route('master.kelulusan.input') }}" class="menu-link">
 				<span class="svg-icon menu-icon">
@@ -87,10 +91,12 @@
 	</ul>
 </div>
 </li>
+@endif
 
+@if(auth()->user()->role->name == 'Tata Usaha')
 <li class="menu-item menu-item-submenu menu-item-rel" data-menu-toggle="click" aria-haspopup="true">
 	<a href="javascript:;" class="menu-link menu-toggle">
-		<span class="menu-text">Pengguna</span>
+		<span class="menu-text">Data</span>
 		<span class="menu-desc"></span>
 		<i class="menu-arrow"></i>
 	</a>
@@ -141,10 +147,13 @@
 	</ul>
 </div>
 </li>
+@endif
 
+@if(auth()->user()->role->name == 'Tata Usaha')
 <li class="menu-item">
 	<a href="{{ route('master.setting') }}" class="menu-link">
 		<span class="menu-text">Pengaturan</span>
 		<i class="menu-arrow"></i>
 	</a>
 </li>
+@endif

@@ -72,9 +72,14 @@ class Teacher extends Authenticatable
 
         $viewMapel = '';
         foreach ($mapel as $key => $row) {
-            $viewMapel .= '<span class="label label-light-success label-pill label-inline mr-2">'.$row.'</span>';
+            $viewMapel .= '<span class="label label-light-success label-pill label-inline mr-2">' . $row . '</span>';
         }
 
         return $viewMapel;
+    }
+
+    public function kelas()
+    {
+        return $this->belongsTo('App\Kelas', 'kelas_id', 'id');
     }
 }

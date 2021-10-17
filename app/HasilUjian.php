@@ -13,4 +13,19 @@ class HasilUjian extends Model
         'n_um',
         'n_ijazah',
     ];
+
+    public function student()
+    {
+        return $this->belongsTo('App\Student', 'student_id', 'id');
+    }
+
+    public function mapel()
+    {
+        return $this->belongsTo('App\Mapel', 'mapel_id', 'id');
+    }
+
+    public function submapel()
+    {
+        return $this->belongsTo('App\SubMapel', 'sub_mapel_id', 'id');
+    }
 }

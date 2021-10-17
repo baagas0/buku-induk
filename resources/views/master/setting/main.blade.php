@@ -129,22 +129,28 @@
 							<!--begin::Group-->
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Applikasi</label>
-								<div class="col-9 input-group qs">
-										<input type="text" id="app_name" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{ setting('app_name') }}"/>
+								<div class="col-9">
+                                    <div class="input-group">
+										<input type="text" id="app_name" class="form-control form-control-lg form-control-solid" placeholder="App Name" value="{{ setting('app_name') }}"/>
 										<div class="input-group-append">
 											<button class="btn btn-primary" id="app_name_button" style="display: none" type="button">Ganti</button>
 										</div>
+                                    </div>
+                                    <span class="form-text text-muted">Recomended 12 caracter</span>
 								</div>
 							</div>
 							<!--end::Group-->
 							<!--begin::Group-->
 							<div class="form-group row">
 								<label class="col-form-label col-3 text-lg-right text-left">Nama Sekolahan</label>
-								<div class="col-9 input-group qs">
-										<input type="text" id="school_name" class="form-control form-control-lg form-control-solid" placeholder="Search for..." value="{{setting('school_name')}}"/>
+								<div class="col-9">
+                                    <div class="input-group">
+										<input type="text" id="school_name" class="form-control form-control-lg form-control-solid" placeholder="School Name" value="{{setting('school_name')}}"/>
 										<div class="input-group-append">
 											<button class="btn btn-primary" id="school_name_button" style="display: none" type="button">Ganti</button>
 										</div>
+                                    </div>
+                                    <span class="form-text text-muted">Recomended 12 caracter</span>
 								</div>
 							</div>
 							<!--end::Group-->
@@ -156,7 +162,7 @@
 				<!--end::Tab-->
 			</div>
 			<!--begin::Footer-->
-			
+
 			<!--end::Footer-->
 		</form>
 	</div>
@@ -300,8 +306,11 @@
 					cache:false,
 					contentType: false,
 					processData: false,
-					success:function(data){
-						toastr.success(data);
+					success:function(response) {
+                        $('#app_name_button').hide();
+                        $('#school_name_button').hide();
+                        $('.'+data.get('slug')).text(data.get('value'));
+						toastr.success(response);
 					},
 					error: function(data){
 						alert("error");

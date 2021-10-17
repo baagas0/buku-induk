@@ -8,7 +8,7 @@ Route::group(['middleware' => 'auth:master','namespace' => 'Master', 'as' => 'ma
     routeController('kelulusan', 'Master\KelulusanController');
     routeController('hasil_ujian', 'Master\HasilUjianController');
 
-    routeController('e-rapor', 'Master\EraporController');
+    routeController('pdf', 'Master\PdfController');
 
     routeController('setting', 'Master\SettingController');
 

@@ -16,27 +16,35 @@ use App\{
 
 class TeacherController extends Controller
 {
-    public function getIndex() {
+    public function getIndex()
+    {
         return view('master.user.guru.main');
     }
 
-    public function postData(Request $req) {
-        Paginator::currentPageResolver(fn() => $req->pagination['page']);
+    public function postData(Request $req)
+    {
+        Paginator::currentPageResolver(fn () => $req->pagination['page']);
 
-        $query = Teacher::paginate(10);
-        // dd($query);
+        $query = Teacher::with('kelas');
+        if ($req->get('query')) {
+            $query->where('name', 'like', '%' . $req->get('query')['like'] . '%')
+                ->orWhere('email', 'like', '%' . $req->get('query')['like'] . '%')
+                ->orWhere('mapel', 'like', '%' . $req->get('query')['like'] . '%');
+        }
 
-        return new TeacherResource($query);
+        return new TeacherResource($query->paginate(10));
     }
 
-    public function getCreate() {
+    public function getCreate()
+    {
         $data['kelompoks'] = Kelompok::get();
         $data['kelases'] = Kelas::get();
         $data['mapels'] = Mapel::get();
         return view('master.user.guru.form', $data);
     }
 
-    public function postSave(Request $req) {
+    public function postSave(Request $req)
+    {
         return Teacher::create([
             'name'      => $req->name,
             'email'     => $req->email,
@@ -45,14 +53,16 @@ class TeacherController extends Controller
             'mapel'     => json_encode($req->mapel),
         ]);
     }
-    public static function getEdit($id){
+    public static function getEdit($id)
+    {
         $data['teacher'] = Teacher::find($id);
         $data['kelompoks'] = Kelompok::get();
         $data['kelases'] = Kelas::get();
         $data['mapels'] = Mapel::get();
-        return view('master.user.guru.edit',$data);
+        return view('master.user.guru.edit', $data);
     }
-    public static function postUpdate(Request $req, $id){
+    public static function postUpdate(Request $req, $id)
+    {
         DB::table('teachers')->where('id', $id)->update([
             'name' => $req->name,
             'email' => $req->email,
@@ -61,7 +71,8 @@ class TeacherController extends Controller
             'mapel' => json_encode($req->mapel),
         ]);
     }
-    public function postDelete($id){
+    public function postDelete($id)
+    {
         DB::table('teachers')->where('id', $id)->delete();
     }
 }

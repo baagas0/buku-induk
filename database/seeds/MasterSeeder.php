@@ -17,11 +17,20 @@ class MasterSeeder extends Seeder
         $bendahara = MasterRole::create(['name' => 'Bendahara']);
 
         $t = new Master;
+        $t->master_role_id = $wk->id;
+        $t->background_image = 'assets/media/bg/tu.jpg';
+        $t->name = 'Waka User';
+        $t->email = 'waka@mail.com';
+        $t->password = bcrypt(12345);
+        $t->save();
+
+        $t = new Master;
         $t->master_role_id = $tu->id;
         $t->background_image = 'assets/media/bg/tu.jpg';
         $t->name = 'TU User';
         $t->email = 'tu@mail.com';
         $t->password = bcrypt(12345);
         $t->save();
+
     }
 }

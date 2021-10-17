@@ -20,7 +20,7 @@ class SettingSeeder extends Seeder
 
         Setting::create([
             'slug'          => 'school_name',
-            'value'         => 'SMK Wikrama 1 Jepara',
+            'value'         => 'SMK Wikrama',
             'description'   => '',
         ]);
 

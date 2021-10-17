@@ -3,7 +3,6 @@
 @section('content')
 
 @if(session()->has('msg'))
-				
 <div class="alert alert-custom alert-notice alert-light-{{ session()->get('type') }} fade show" role="alert">
     <div class="alert-icon"><i class="flaticon-warning"></i></div>
     <div class="alert-text">{{ session()->get('msg') }}</div>
@@ -61,7 +60,7 @@
 				</div>
 				<div class="pt-5">
 					<p class="text-center font-weight-normal font-size-lg pb-7">Catatan: Angka diatas menunjukan presentasi keberhasilan dalam proses pembuatan E-rapor PDF</p>
-					<a href="{{ route('master.e-rapor') }}" class="btn btn-success btn-shadow-hover font-weight-bolder w-100 py-3">Generate E-rapor</a>
+					<a href="{{ route('master.pdf') }}" class="btn btn-success btn-shadow-hover font-weight-bolder w-100 py-3">Generate E-rapor</a>
 				</div>
 			</div>
 			<!--end::Body-->
@@ -168,7 +167,7 @@
 							<h3 class="text-white font-weight-bolder line-height-lg mb-5">Buat Data
 							<br />E-rapor Otomatis</h3>
 						</div>
-						<a href='{{ route('master.e-rapor') }}' class="btn btn-link btn-link-warning font-weight-bold">Buat Sekarang
+						<a href='{{ route('master.pdf') }}' class="btn btn-link btn-link-warning font-weight-bold">Buat Sekarang
 						<span class="svg-icon svg-icon-lg svg-icon-warning">
 							<!--begin::Svg Icon | path:assets/media/svg/icons/Navigation/Arrow-right.svg') }}-->
 							<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -196,7 +195,7 @@
 // Class definition
 
 var KTDefaultDatatableDemo = function() {
-	
+
 	var success_presentation_rpdf = function () {
         var element = document.getElementById("success_presentation_rpdf_chart");
         var height = parseInt(KTUtil.css(element, 'height'));

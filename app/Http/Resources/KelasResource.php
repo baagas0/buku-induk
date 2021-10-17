@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class KelulusanResource extends ResourceCollection
+class KelasResource extends ResourceCollection
 {
     /**
      * Transform the resource collection into an array.
@@ -23,9 +23,9 @@ class KelulusanResource extends ResourceCollection
     {
         return [
             'meta' => [
-                // 'page' => $this->currentPage(),
-                // 'pages' => $this->lastPage(),
-                // 'perpage' => $this->perPage(),
+                'page' => $this->currentPage(),
+                'pages' => $this->lastPage(),
+                'perpage' => $this->perPage(),
                 'sort' => 'asc',
                 'field' => 'id',
             ],

@@ -16,7 +16,7 @@ License: You must have a valid license purchased only from themeforest(the above
     <!--begin::Head-->
     <head><base href="../../../../">
         <meta charset="utf-8" />
-        <title>Login Master Karyawan | Keenthemes</title>
+        <title>{{ setting('app_name') }} | Login</title>
         <meta name="description" content="Login page example" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <link rel="canonical" href="https://keenthemes.com/metronic" />
@@ -48,12 +48,13 @@ License: You must have a valid license purchased only from themeforest(the above
                         <div class="login-wrapper">
                             <!--begin:Aside Content-->
                             <div class="text-dark-75">
-                                <a href="#">
-                                    <img src="{{ asset('assets/media/logos/logo-letter-13.png') }}" class="max-h-75px" alt="" />
+                                <a href="/">
+                                    <img src="{{ asset(setting('logo_l_1')) }}" class="max-h-100px" alt="" />
                                 </a>
-                                <h3 class="mb-8 mt-22 font-weight-bold">JOIN OUR GREAT COMMUNITY</h3>
-                                <p class="mb-15 text-muted font-weight-bold">The ultimate Bootstrap &amp; Angular 6 admin theme framework for next generation web apps.</p>
-                                <button type="button" id="kt_login_signup" class="btn btn-outline-primary btn-pill py-4 px-9 font-weight-bold">Get An Account</button>
+                                <h3 class="mb-8 mt-22 font-weight-bold">Masuk Ke {{ setting('app_name') }}</h3>
+                                <p class="mb-15 text-muted font-weight-bold">Powerfull Under Control PDF Reporting Application with laravel framework.</p>
+                                <a href="{{ route('master.login') }}"><button type="button" class="btn btn-outline-primary btn-pill py-4 px-9 font-weight-bold active">Karyawan</button></a>
+                                <a href="{{ route('teacher.login') }}"><button type="button" class="btn btn-outline-primary btn-pill py-4 px-9 font-weight-bold">Guru</button></a>
                             </div>
                             <!--end:Aside Content-->
                         </div>
@@ -71,7 +72,7 @@ License: You must have a valid license purchased only from themeforest(the above
                             <div class="login-signin">
                                 <div class="text-center mb-10 mb-lg-20">
                                     <h2 class="font-weight-bold">Masuk Sebagai Karyawan</h2>
-                                    <p class="text-muted font-weight-bold">Masukan email dan kata sandi pengguna, hubungi administrator sekolah jika anda belum memiliki akun.</p>
+                                    <p class="text-muted font-weight-bold">Masukan email dan kata sandi pengguna, hubungi bagian tata usaha jika anda mengalami kendala.</p>
                                 </div>
                                 <form class="form text-left" id="kt_login_signin_form" method="POST" action="{{ route('master.login') }}" aria-label="{{ __('Login') }}">
                                     @csrf

@@ -1,5 +1,6 @@
 @extends('master.layouts.app')
-@push('title', 'E-Rapor Management')
+@push('title', 'PDF Management')
+@section('instruction', 'pdf_management_page')
 @section('content')
 <!--begin::Card-->
 <div class="card card-custom">
@@ -84,18 +85,82 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" id="modalCreateLabel">Buat File E-Rapor Baru</h5>
+						<h5 class="modal-title" id="modalCreateLabel">Buat File PDF Baru</h5>
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<i aria-hidden="true" class="ki ki-close"></i>
 						</button>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
+							<div class="row">
+								<div class="col-lg-6">
+									<label class="option">
+										<span class="option-control">
+											<span class="radio">
+												<input type="radio" name="semester" value="0" checked="checked"/>
+												<span></span>
+											</span>
+										</span>
+										<span class="option-label">
+											<span class="option-head">
+												<span class="option-title">
+													Semua Semester
+												</span>
+											</span>
+											<span class="option-body">
+												Menampilkan semua semester
+											</span>
+										</span>
+									</label>
+								</div>
+								<div class="col-lg-6">
+									<label class="option">
+										<span class="option-control">
+											<span class="radio">
+												<input type="radio" name="semester" value="1"/>
+												<span></span>
+											</span>
+										</span>
+										<span class="option-label">
+											<span class="option-head">
+												<span class="option-title">
+													Semester 1
+												</span>
+											</span>
+											<span class="option-body">
+												Hanya menampilkan semester 1
+											</span>
+										</span>
+									</label>
+								</div>
+								<div class="col-lg-6">
+									<label class="option">
+										<span class="option-control">
+											<span class="radio">
+												<input type="radio" name="semester" value="2"/>
+												<span></span>
+											</span>
+										</span>
+										<span class="option-label">
+											<span class="option-head">
+												<span class="option-title">
+													Semester 2
+												</span>
+											</span>
+											<span class="option-body">
+												Hanya menampilkan semester 2
+											</span>
+										</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
 							<label>Tahun Pelajaran:</label>
 							<select class="form-control select2" id="th_pelajaran" name="th_pelajaran" style="width:100%" multiple="multiple">
 								@php
 									$y = date('Y');
-									for ($i=$y-5; $i < $y+3; $i++) { 
+									for ($i=$y-5; $i < $y+3; $i++) {
 								@endphp
 									<option {{ $i == $y ? 'selected' : '' }}>{{ $i }}</option>";
 								@php
@@ -143,7 +208,7 @@ var KTDefaultDatatableDemo = function() {
 				type: 'remote',
 				source: {
 					read: {
-						url: '{{ route('master.e-rapor.data') }}',
+						url: '{{ route('master.pdf.data') }}',
 					},
 				},
 				pageSize: 5, // display 20 records per page
@@ -258,7 +323,7 @@ var KTDefaultDatatableDemo = function() {
 					autoHide: false,
 					template: function(row) {
 						return '\
-	                        <a href="{{route('master.e-rapor.view')}}/'+row.token+'" id"edit" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">\
+	                        <a href="{{route('master.pdf.view')}}/'+row.token+'" id"edit" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">\
 	                            <span class="svg-icon svg-icon-md">\
 		                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
 		                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
@@ -274,7 +339,7 @@ var KTDefaultDatatableDemo = function() {
 			],
 
 		});
-		
+
 		$('#refreshData').on('click', function(){
 			datatable.reload();
 		})
@@ -300,7 +365,7 @@ var KTDefaultDatatableDemo = function() {
 		function getData() {
 			$.ajax({
 				type: "POST",
-				url: "{{ route('master.e-rapor.progress.data') }}",
+				url: "{{ route('master.pdf.progress.data') }}",
 				success: function(data){
 					console.log(data);
 					for (var i = 0; i < data.length; i++) {
@@ -348,7 +413,7 @@ var KTDefaultDatatableDemo = function() {
 		$('#saveModalCreate').click(function() {
 			$.ajax({
 				type: "POST",
-				url: "{{ route('master.e-rapor.saving') }}",
+				url: "{{ route('master.pdf.saving') }}",
 				data: {
 					th_pelajaran: $('#th_pelajaran').val(),
 					kelas_id: $('#kelas_id').val(),

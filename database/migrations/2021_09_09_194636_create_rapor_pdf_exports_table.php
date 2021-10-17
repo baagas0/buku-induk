@@ -18,6 +18,7 @@ class CreateRaporPdfExportsTable extends Migration
             $table->string('token')->unique();
             $table->foreignId('kelas_id');
             $table->string('th_pelajaran');
+            $table->enum('semester', [0,1,2])->default(0);
             $table->integer('count_job')->default(0);
             $table->integer('on_going_job')->default(0);
             $table->enum('status', ['pending', 'proccess', 'success', 'error'])->default('pending');

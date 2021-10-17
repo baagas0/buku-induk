@@ -3,6 +3,8 @@
 @section('content')
 <?php
 	$r_th = Request::get('tahun_pelajaran');
+	$s = Request::get('semester');
+	$colspan_s = $s == 0 ? 6 : ($s == 1 || $s == 2 ? 3 : 0);
 ?>
 <style type="text/css">
 .table thead tr th, 
@@ -13,15 +15,37 @@
 }
 </style>
 <form class="row">
-	<div class="form-group col-md-6">
+	<div class="form-group col-md-3">
 		<label class="text-white text-hover-white opacity-75 hover-opacity-100">Tahun Pelajaran</label>
 		<div class="input-group">
 			<input type="text" class="form-control" name="tahun_pelajaran" id="filter_th_pelajaran" value="{{ $r_th ? $r_th : '' }}" placeholder="yyyy/yyyy" />
 			<div class="input-group-append">
-				<button type="submit" class="btn btn-info" type="button">Go!</button>
+				<button type="submit" class="btn btn-info" type="button" id="inputFormFilter">Kirim!</button>
 			</div>
 		</div>
-		<span class="form-text text-muted">Input tahun pelajaran: <code>yyyy/yyyy</code></span>
+		<span class="form-text text-white">Input tahun pelajaran: <code>yyyy/yyyy</code></span>
+	</div>
+	<div class="form-group col-md-4">
+		<label class="text-white text-hover-white opacity-75 hover-opacity-100">Semester</label>
+		<div class="input-group">
+			<div class="radio-inline">
+                <label class="radio radio-outline radio-primary text-white">
+                    <input type="radio" name="semester" value="0" {{ $s == 0 ? 'checked' : '' }}/>
+                    <span></span>
+                    Semua
+                </label>
+                <label class="radio radio-outline radio-primary text-white">
+                    <input type="radio" name="semester" value="1" {{ $s == 1 ? 'checked' : '' }}/>
+                    <span></span>
+                    Semester 1
+                </label>
+                <label class="radio radio-outline radio-primary text-white">
+                    <input type="radio" name="semester" value="2" {{ $s == 2 ? 'checked' : '' }}/>
+                    <span></span>
+                    Semester 2
+                </label>
+            </div>
+		</div>
 	</div>
 </form>
 <!--begin::Card-->
@@ -55,42 +79,47 @@
 		<fieldset class="Nilai 1 mt-6 table-responsive" >
 			<p><b>I Nilai Pengetahuan, Praktik dan Sikap</b></p>
 			<!--begin: Datatable-->
-			
 			<table class="table table-bordered table-hover table-checkable" id="kt_datatable" style="margin-top: 13px !important">
 				<thead class="text-center">
 					<tr>
 						<th rowspan="4" style="width: 10px;">No</th>
 						<th rowspan="4">Komponen</th>
 						<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
-							<th colspan="7">Tahun Pelajaran : {{ $tahunpelajaran[$i].'/'.($tahunpelajaran[$i]+1) }}</th>
+							<th colspan="{{ $colspan_s + 1 }}">Tahun Pelajaran : {{ $tahunpelajaran[$i].'/'.($tahunpelajaran[$i]+1) }}</th>
 						<?php } ?>
 					</tr>
 					<tr>
 					<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
-						<th colspan="7">Kelas : X IPA</th>
+						<th colspan="{{ $colspan_s + 1 }}">Kelas : X IPA</th>
 						<?php } ?>
 					</tr>
 					<tr>
 						<?php for($i=0; $i<count($tahunpelajaran); $i++){?>
 						<th rowspan="2">KKM</th>
+						@if($s == 0 || $s == 1)
 						<th>SMT</th>
 						<th>:</th>
 						<th>1</th>
-
+						@endif
+						@if($s == 0 || $s == 2)
 						<th>SMT</th>
 						<th>:</th>
 						<th>2</th>
+						@endif
 						<?php } ?>
 					</tr>
 					<tr>
 						<?php for($i=0; $i<count($tahunpelajaran); $i++){ ?>
+							@if($s == 0 || $s == 1)
 							<th>Peng</th>
 							<th>Ketr</th>
 							<th>Skp</th>
-
+							@endif
+							@if($s == 0 || $s == 2)
 							<th>Peng</th>
 							<th>Ketr</th>
 							<th>Skp</th>
+							@endif
 						<?php } ?>
 					</tr>
 				</thead>
@@ -138,21 +167,29 @@
 								
 								@foreach($q2 as $qrow)
 								<td>{{ $qrow->kkm}}</td>
-								<td>{{ $qrow->n_peng }}</td>
-								<td>{{ $qrow->n_ketr }}</td>
-								<td>{{ $qrow->n_skp }}</td>
-								<td>{{ $qrow->n_peng2 }}</td>
-								<td>{{ $qrow->n_ketr2 }}</td>
-								<td>{{ $qrow->n_skp2 }}</td>
+									@if($s == 0 || $s == 1)
+									<td>{{ $qrow->n_peng }}</td>
+									<td>{{ $qrow->n_ketr }}</td>
+									<td>{{ $qrow->n_skp }}</td>
+									@endif
+									@if($s == 0 || $s == 2)
+									<td>{{ $qrow->n_peng2 }}</td>
+									<td>{{ $qrow->n_ketr2 }}</td>
+									<td>{{ $qrow->n_skp2 }}</td>
+									@endif
 								@endforeach
 							<?php }else{?>
 								<td>-</td>
+								@if($s == 0 || $s == 1)
 								<td>-</td>
 								<td>-</td>
 								<td>-</td>
+								@endif
+								@if($s == 0 || $s == 2)
 								<td>-</td>
 								<td>-</td>
 								<td>-</td>
+								@endif
 							<?php
 								
 							}
@@ -171,12 +208,16 @@
 									?>
 								@foreach($q1 as $qrow)
 								<td>{{ $qrow->kkm}}</td>
+								@if($s == 0 || $s == 1)
 								<td>{{ $qrow->n_peng }}</td>
 								<td>{{ $qrow->n_ketr }}</td>
 								<td>{{ $qrow->n_skp }}</td>
+								@endif
+								@if($s == 0 || $s == 2)
 								<td>{{ $qrow->n_peng2 }}</td>
 								<td>{{ $qrow->n_ketr2 }}</td>
 								<td>{{ $qrow->n_skp2 }}</td>
+								@endif
 								@endforeach
 								<?php }else{?>
 									<td>-</td>
@@ -480,29 +521,30 @@
 @endsection
 @push('js')
 <script type="text/javascript">
-	// Class definition
 
-var KTInputmask = function () {
+	var KTInputmask = function () {
 
- // Private functions
- var demos = function () {
-  // date format
-  $("#filter_th_pelajaran").inputmask("9999/9999", {
-   "placeholder": "yyyy/yyyy",
-   autoUnmask: true
-  });
- }
 
- return {
-  // public functions
-  init: function() {
-   demos();
-  }
- };
-}();
+		var demos = function () {
+			$("#filter_th_pelajaran").inputmask("9999/9999", {
+				"placeholder": "yyyy/yyyy",
+				autoUnmask: true
+			});
+			$('input[name="semester"]').on('change', function() {
+				$('#inputFormFilter').trigger('click');
+			})
+		}
 
-jQuery(document).ready(function() {
- KTInputmask.init();
-});
+		return {
+
+			init: function() {
+				demos();
+			}
+		};
+	}();
+
+	jQuery(document).ready(function() {
+		KTInputmask.init();
+	});
 </script>
 @endpush

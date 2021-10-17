@@ -45,7 +45,7 @@
 							</g>
 						</svg><!--end::Svg Icon-->
 					</span>
-					<span class="menu-text">Data Siswa</span>
+					<span class="menu-text">Export Data Siswa</span>
 				</a>
 			</li>
 			<li class="menu-item">

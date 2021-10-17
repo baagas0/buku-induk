@@ -14,7 +14,7 @@ use App\{
 };
 use Illuminate\Pagination\Paginator;
 
-class EraporController extends Controller
+class PdfController extends Controller
 {
     public function __construct(Redirector $redirect)
     {
@@ -22,7 +22,8 @@ class EraporController extends Controller
         // dd($this->user);
     }
 
-    public function getIndex() {
+    public function getIndex()
+    {
 
         if (checkGuard('Waka Kurikulum') == false) {
             return redirect()->route('master.home')->with([
@@ -32,45 +33,51 @@ class EraporController extends Controller
         }
 
         $data['kelas'] = Kelas::get();
-        return view('master.erapor.main', $data);
+        return view('master.pdf.main', $data);
     }
-    public function postData(Request $req) {
-        Paginator::currentPageResolver(fn() => $req->pagination['page']);
+
+    public function postData(Request $req)
+    {
+        Paginator::currentPageResolver(fn () => $req->pagination['page']);
 
         $query = RaporPdfExport::with('kelas')
-        ->orderBy('id', 'desc')
-        ->paginate(10);
+            ->orderBy('id', 'desc')
+            ->paginate(10);
 
         return new RaporPdfResource($query);
     }
-    public function postProgressData(){
+
+    public function postProgressData()
+    {
         return RaporPdfExport::where('status', 'proccess')->get();
     }
 
-    public function postSaving(Request $req) {
+    public function postSaving(Request $req)
+    {
         RaporPdfExport::create([
             'kelas_id' => $req->kelas_id,
             'th_pelajaran' => json_encode($req->th_pelajaran),
         ]);
     }
 
-    public function getView($token) {
+    public function getView($token)
+    {
         $data['raporPdf'] = RaporPdfExport::where('token', $token)->first();
         $data['history'] = RaporPdfExportHistory::where('rapor_pdf_exports_id', $data['raporPdf']->id);
         $data['historyPdf'] = RaporPdfExportHistory::where('rapor_pdf_exports_id', $data['raporPdf']->id);
         // dd($data['history']->get()[0]->component);
-        return view('master.erapor.view', $data);
+        return view('master.pdf.view', $data);
     }
 
-    public function getZip($token) {
-        $zip_file = 'E-rapor '.date('d M Y').' - '.$token.'.zip';
+    public function getZip($token)
+    {
+        $zip_file = 'E-rapor ' . date('d M Y') . ' - ' . $token . '.zip';
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-        $path = storage_path('app\public\pdf/'.$token);
+        $path = storage_path('app\public\pdf/' . $token);
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        foreach ($files as $name => $file)
-        {
+        foreach ($files as $name => $file) {
             // We're skipping all subfolders
             if (!$file->isDir()) {
                 $filePath     = $file->getRealPath();

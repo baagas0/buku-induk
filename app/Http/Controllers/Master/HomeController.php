@@ -25,7 +25,8 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index() {
+    public function index()
+    {
         $rpdf = RaporPdfExport::get();
 
         $count_job = $rpdf->sum('count_job');
@@ -33,6 +34,7 @@ class HomeController extends Controller
         // dd($count_job, $on_going_job);
 
         $data['success_presentation_rpdf'] = ($on_going_job / $count_job) * 100;
+        // $data['success_presentation_rpdf'] = ($on_going_job / $count_job) * 100;
         return view('master.dashboard', $data);
     }
 }

@@ -188,6 +188,18 @@ License: You must have a valid license purchased only from themeforest(the above
 						<div class="d-flex flex-column-fluid">
 							<!--begin::Container-->
 							<div class="container">
+                                @if(session()->has('msg'))
+                                <div class="alert alert-custom alert-notice alert-light-{{ session()->get('type') }} fade show" role="alert">
+                                    <div class="alert-icon"><i class="flaticon-warning"></i></div>
+                                    <div class="alert-text">{{ session()->get('msg') }}</div>
+                                    <div class="alert-close">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true"><i class="ki ki-close"></i></span>
+                                        </button>
+                                    </div>
+                                </div>
+                                @endif
+
                                 @if(View::hasSection('instruction'))
                                 <!--begin::Notice-->
                                 <div class="alert alert-custom alert-white alert-shadow gutter-b" role="alert">
@@ -301,7 +313,7 @@ License: You must have a valid license purchased only from themeforest(the above
 				<!--begin::Nav-->
 				<div class="navi navi-spacer-x-0 p-0">
 					<!--begin::Item-->
-					<a href="custom/apps/user/profile-1/personal-information.html" class="navi-item">
+					<a href="{{ route('teacher.profile.detail') }}" class="navi-item">
 						<div class="navi-link">
 							<div class="symbol symbol-40 bg-light mr-3">
 								<div class="symbol-label">

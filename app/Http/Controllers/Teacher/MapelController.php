@@ -12,12 +12,10 @@ use App\{
 
 class MapelController extends Controller
 {
-    public function getIndex(){
+    public function getIndex()
+    {
         $data['kelompoks'] = Kelompok::with('mapel')->get();
 
-        foreach ($data['kelompoks'] as $key => $value) {
-            // dd($value);
-        }
         return view('teacher.mapel.main', $data);
     }
 }

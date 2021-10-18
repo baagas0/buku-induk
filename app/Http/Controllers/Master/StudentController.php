@@ -38,6 +38,7 @@ use App\{
     Kelulusan,
     Kelompok,
 };
+use App\Imports\StudentImport;
 use DB;
 use Illuminate\Pagination\Paginator;
 
@@ -384,6 +385,20 @@ class StudentController extends Controller
         }
 
         return Excel::download(new StudentExport($kelas_id, $heading), ucwords($tipe) . ' - StudentExport.xlsx');
+    }
+
+    public function getImport()
+    {
+        return view('master.student.import');
+    }
+    public function postImportProccess(Request $request)
+    {
+        Excel::import(new StudentImport, $request->file_student);
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'msg' => 'Data berhasil diproses'
+        ]);
     }
 
     public function getView($nis, Request $request)

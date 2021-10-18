@@ -106,8 +106,9 @@
 							<!--begin::Form Group-->
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">Kata Sandi</label>
-								<input type="password" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="password" placeholder="Kata Sandi Pengguna" id="password" value="{{$teacher->password}}" />
-							</div>
+								<input type="password" class="form-control h-auto p-6 border-0 rounded-lg font-size-h6" name="password" placeholder="Kata Sandi Pengguna" id="password" />
+                                <span class="form-text text-muted">Diisi hanya untuk mengganti.</span>
+                            </div>
 							<!--end::Form Group-->
 						</div>
 						<!--end: Wizard Step 1-->
@@ -130,9 +131,8 @@
 									?>
 									<optgroup label="{{ $kelompok->name }}">
 										@foreach($mapels as $mapel)
-										<option>{{ $mapel->name }}</option>
+										<option {{ in_array( $mapel->name, json_decode($teacher->getRawOriginal('mapel')) ) ? 'selected' : '' }}>{{ $mapel->name }}</option>
 										@endforeach
-										<option selected="">asd</option>
 									</optgroup>
 									@endforeach
 								</select>
@@ -140,10 +140,10 @@
 
 							<div class="form-group">
 								<label class="font-size-h6 font-weight-bolder text-dark">Wali Kelas</label>
-								<select name="kelas_id" id="kelas" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
+								<select name="kelas_id" id="kelas_id" class="form-control h-auto p-5 border-0 rounded-lg font-size-h6">
 									<option value="">Pilih Kelas</option>
 									@foreach($kelases as $kelas)
-									<option value="{{ $kelas->id }}">{{ $kelas->name }}</option>
+									<option value="{{ $kelas->id }}" {{ $kelas->id == $teacher->kelas_id ? 'selected' : '' }}>{{ $kelas->name }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -244,7 +244,7 @@
 			placeholder: "Pilih Mata Pelajaran",
 			width: '100%'
 		});
-		$('#kelas').select2({
+		$('#kelas_id').select2({
 			placeholder: "Pilih Kelas",
 			width: '100%'
 		});
@@ -303,14 +303,14 @@
 				$('#confirm-name').text($('#name').val());
 				$('#confirm-email').text($('#email').val());
 				$('#confirm-mapel').text($('#mapel').val());
-				$('#confirm-kelas').text($('#kelas option:selected').text());
+				$('#confirm-kelas').text($('#kelas_id option:selected').text());
 			});
 
 			// Submit event
 			_wizardObj.on('submit', function (wizard) {
 				Swal.fire({
 					text: "Semua telah terisi, Lakukan konfirmasi pengiriman data guru!.",
-					icon: "success",
+					icon: "warning",
 					showCancelButton: true,
 					buttonsStyling: false,
 					confirmButtonText: "Ya, submit!",
@@ -323,6 +323,7 @@
 					if (result.value) {
 						// _formEl.submit(); // Submit form
 						var name = $('#name').val();
+						var kelas_id = $('#kelas_id').val();
 						var email = $('#email').val();
 						var mapel = $('#mapel').val();
 						var kelas = $('#kelas').val();
@@ -333,6 +334,7 @@
 							url: "{{ route('master.user.teacher.update') }}/"+ id,
 							data: {
 								name: name,
+								kelas_id: kelas_id,
 								email: email,
 								mapel: mapel,
 								kelas: kelas,
@@ -344,7 +346,7 @@
 							error: function(data){
 								toastr.error('Gagal Mengubah data Guru, Silahkan cek inputan anda');
 							}
-						});	
+						});
 					} else if (result.dismiss === 'cancel') {
 						Swal.fire({
 							text: "Inputan Gagal Diubah!.",
@@ -381,13 +383,13 @@
 								}
 							}
 						},
-						password: {
-							validators: {
-								notEmpty: {
-									message: 'Cek data kata sandi pengguna'
-								}
-							}
-						},
+						// password: {
+						// 	validators: {
+						// 		notEmpty: {
+						// 			message: 'Cek data kata sandi pengguna'
+						// 		}
+						// 	}
+						// },
 					},
 					plugins: {
 						trigger: new FormValidation.plugins.Trigger(),

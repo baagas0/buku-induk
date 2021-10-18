@@ -76,12 +76,11 @@
 			<div class="form-group row">
 				<label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Mata Pelajaran</label>
 				<div class=" col-lg-4 col-md-9 col-sm-12">
+
 					<select class="form-control select2" id="mapel" name="mapel">
 						@foreach($kelompok as $row)
                         <?php $mapels = App\Mapel::where('kelompok_id', $row->id)->whereIn('name', Auth::guard('teacher')->user()->lmapel)->get() ?>
-
-                        @if (empty($mapels))
-                        @else
+                        @if (count($mapels))
                         <optgroup label="{{ $row->name }}">
 							@foreach($mapels as $mapel)
                             @if($mapel->is_sub == 0)
@@ -90,7 +89,7 @@
                             <?php $submapels = App\SubMapel::where('mapel_id', $mapel->id)->get() ?>
                             <optgroup label="{{ $mapel->name }}">
                                 @foreach($submapels as $submapel)
-                                <option value="0,{{ $submapel->id }}">{{ $submapel->name }}</option>
+                                <option value="0,{{ $submapel->id }}">&nbsp;&nbsp;&nbsp;&nbsp;{{ $submapel->name }}</option>
                                 @endforeach
                             </optgroup>
                             @endif

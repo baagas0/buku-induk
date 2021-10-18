@@ -60,6 +60,10 @@ class HasilUjianController extends Controller
     {
         $mapel = $request->mapel;
         $import = Excel::import(new HasilUjianImport($mapel), $request->file_nilai, null, \Maatwebsite\Excel\Excel::XLSX);
-        dd($import);
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'msg' => 'Data berhasil diproses'
+        ]);
     }
 }

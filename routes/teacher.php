@@ -1,9 +1,11 @@
 <?php
 
-Route::group(['middleware' => ['auth:teacher'],'namespace' => 'Teacher', 'as' => 'teacher.'], function() {
+Route::group(['middleware' => ['auth:teacher'], 'namespace' => 'Teacher', 'as' => 'teacher.'], function () {
     routeController('mapel', 'Teacher\MapelController');
     routeController('student', 'Teacher\StudentController');
     routeController('nilai', 'Teacher\NilaiController');
+
+    routeController('profile', 'Teacher\ProfileController');
 
     routeController('nilai', 'Teacher\NilaiController');
     routeController('upd', 'Teacher\UpdController');
@@ -12,10 +14,9 @@ Route::group(['middleware' => ['auth:teacher'],'namespace' => 'Teacher', 'as' =>
     routeController('prestasi', 'Teacher\PrestasiController');
     routeController('kelulusan', 'Teacher\KelulusanController');
     routeController('hasil_ujian', 'Teacher\HasilUjianController');
-
 });
 
-Route::group(['namespace' => 'Teacher'], function() {
+Route::group(['namespace' => 'Teacher'], function () {
     // Dashboard
     Route::get('/', 'HomeController@index')->name('teacher.home');
 

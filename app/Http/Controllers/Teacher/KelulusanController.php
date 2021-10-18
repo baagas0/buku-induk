@@ -9,14 +9,20 @@ use App\Imports\KelulusanImport;
 
 class KelulusanController extends Controller
 {
-    public function getInput(){
+    public function getInput()
+    {
         return view('teacher.kelulusan.input');
     }
-    
-    public function postProccessInput(Request $request){
+
+    public function postProccessInput(Request $request)
+    {
         $data = $request->all();
-        
+
         $import = Excel::import(new KelulusanImport($data), $request->file_nilai, null, \Maatwebsite\Excel\Excel::XLSX);
-        dd($import);
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'msg' => 'Data berhasil diproses'
+        ]);
     }
 }

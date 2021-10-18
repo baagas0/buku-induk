@@ -142,6 +142,16 @@ var KTDefaultDatatableDemo = function() {
 						return row.mapel;
 					},
 				}, {
+					field: 'kelas.name',
+					title: 'Wali Kelas',
+                    template: function(row){
+                        if(row.kelas != null){
+                            return row.kelas.name;
+                        }else {
+                            return '-';
+                        }
+                    }
+				}, {
 					field: 'Actions',
 					title: 'Actions',
 					sortable: false,

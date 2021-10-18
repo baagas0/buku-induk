@@ -18,6 +18,10 @@ class InstructionSeeder extends Seeder
                 'value' => 'Untuk melihat data masing-masing siswa silahkan pilih melalui opsi Data Anak Table.',
             ],
             [
+                'slug'  => 'import_student_page',
+                'value' => '1. download template excel dari <a href="' . asset('import data siswa.xlsx') . '" >sini</a><br>2. Edit data NIS, Nama, Kelas, Email (dapat dikosongkan) sesuai dengan data diri siswa<br>3. Pastikan tidak ada duplikat NIS dan Email<br>4.Simpan dan upload file tadi ke form section<br>5. Klik Submit untuk memproses file',
+            ],
+            [
                 'slug'  => 'pdf_management_page',
                 'value' => 'Untuk membuat data silahkan pilih New Record. Tunggu sebentar dan pilih action detail untuk mendownload hasil generator.',
             ],

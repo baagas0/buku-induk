@@ -41,8 +41,9 @@ $kelas_id = Request::get('kelas_id');
 							<label class="col-form-label col-lg-3 col-sm-12 text-lg-right">Kelas</label>
 							<div class=" col-lg-4 col-md-9 col-sm-12">
 								<select class="form-control select2" id="kelas_id" name="kelas_id">
+                                    <option value="" selected>Pilih Kelas</option>
 									@foreach($kelas as $row)
-									<option value="{{ $row->id }}" {{ $kelas_id == $row->id ? 'selected' : '' }}>{{ $row->name }}</option>
+									<option value="{{ $row->id }}" {{ $kelas_id == $row->id ? 'selected' : '' }}>{{ $row->name.(auth()->guard('teacher')->user()->kelas_id == $row->id ? ' - Wali Kelas' : '') }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -52,12 +53,12 @@ $kelas_id = Request::get('kelas_id');
 							<div class=" col-lg-4 col-md-9 col-sm-12">
 								<select class="form-control select2" id="tipe" name="tipe">
 									<option value="nilai">Nilai</option>
-									<option value="upd">Upd</option>
-									<option value="akhlak">Akhlak</option>
-									<option value="ketidakhadiran">Ketidakhadiran</option>
-									<option value="prestasi">Prestasi</option>
-									<option value="kelulusan">Kelulusan</option>
-									<option value="hasil_ujian">Hasil Ujian</option>
+									<option value="upd" disabled>Upd</option>
+									<option value="akhlak" disabled>Akhlak</option>
+									<option value="ketidakhadiran" disabled>Ketidakhadiran</option>
+									<option value="prestasi" disabled>Prestasi</option>
+									<option value="kelulusan" disabled>Kelulusan</option>
+									<option value="hasil_ujian" disabled>Hasil Ujian</option>
 								</select>
 							</div>
 						</div>
@@ -95,8 +96,21 @@ $kelas_id = Request::get('kelas_id');
 			});
 
             $('#kelas_id').on('change', function() {
-                if(kelas_id != $(this).val()){
-                    // alert('asd');
+                var tipe = $('#tipe');
+                if(kelas_id == $(this).val()){
+                    tipe.children('option[value="upd"]').attr('disabled', false);
+                    tipe.children('option[value="akhlak"]').attr('disabled', false);
+                    tipe.children('option[value="ketidakhadiran"]').attr('disabled', false);
+                    tipe.children('option[value="prestasi"]').attr('disabled', false);
+                    tipe.children('option[value="kelulusan"]').attr('disabled', false);
+                    tipe.children('option[value="hasil_ujian"]').attr('disabled', false);
+                }else {
+                    tipe.children('option[value="upd"]').attr('disabled', true);
+                    tipe.children('option[value="akhlak"]').attr('disabled', true);
+                    tipe.children('option[value="ketidakhadiran"]').attr('disabled', true);
+                    tipe.children('option[value="prestasi"]').attr('disabled', true);
+                    tipe.children('option[value="kelulusan"]').attr('disabled', true);
+                    tipe.children('option[value="hasil_ujian"]').attr('disabled', true);
                 }
             });
 		}

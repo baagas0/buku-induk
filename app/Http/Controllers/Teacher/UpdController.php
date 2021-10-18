@@ -9,13 +9,19 @@ use App\Imports\UpdImport;
 
 class UpdController extends Controller
 {
-    public function getInput(){
+    public function getInput()
+    {
         return view('teacher.upd.input');
     }
-    public function postProccessInput(Request $request){
+    public function postProccessInput(Request $request)
+    {
         $data = $request->all();
-        
+
         $import = Excel::import(new UpdImport($data), $request->file_nilai, null, \Maatwebsite\Excel\Excel::XLSX);
-        dd($import);
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'msg' => 'Data berhasil diproses'
+        ]);
     }
 }

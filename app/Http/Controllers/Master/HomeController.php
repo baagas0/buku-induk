@@ -29,8 +29,8 @@ class HomeController extends Controller
     {
         $rpdf = RaporPdfExport::get();
 
-        $count_job = $rpdf->sum('count_job');
-        $on_going_job = $rpdf->sum('on_going_job');
+        $count_job = $rpdf->sum('count_job') != 0 ? $rpdf->sum('count_job') : 1;
+        $on_going_job = $rpdf->sum('on_going_job') != 0 ? $rpdf->sum('on_going_job') : 1;
         // dd($count_job, $on_going_job);
 
         $data['success_presentation_rpdf'] = ($on_going_job / $count_job) * 100;

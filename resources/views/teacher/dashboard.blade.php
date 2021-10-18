@@ -1,5 +1,5 @@
 @extends('teacher.layouts.app')
-@push('title', 'Teacher Dashboarda')
+@push('title', 'Teacher Dashboard')
 @section('content')
 <!--begin::Row-->
 <div class="row">

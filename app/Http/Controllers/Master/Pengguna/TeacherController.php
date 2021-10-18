@@ -56,6 +56,7 @@ class TeacherController extends Controller
     public static function getEdit($id)
     {
         $data['teacher'] = Teacher::find($id);
+        // dd(json_decode($data['teacher']));
         $data['kelompoks'] = Kelompok::get();
         $data['kelases'] = Kelas::get();
         $data['mapels'] = Mapel::get();
@@ -63,13 +64,16 @@ class TeacherController extends Controller
     }
     public static function postUpdate(Request $req, $id)
     {
-        DB::table('teachers')->where('id', $id)->update([
-            'name' => $req->name,
-            'email' => $req->email,
-            'password' => bcrypt($req->password),
-            'kelas_id' => $req->kelas_id,
-            'mapel' => json_encode($req->mapel),
-        ]);
+        $teacher = Teacher::find($id);
+        $teacher->kelas_id = $req->kelas_id;
+        $teacher->name = $req->name;
+        $teacher->email = $req->email;
+        if (!empty($req->password)) {
+            $teacher->password = bcrypt($req->password);
+        }
+        $teacher->kelas_id = $req->kelas_id;
+        $teacher->mapel = json_encode($req->mapel);
+        $teacher->save();
     }
     public function postDelete($id)
     {

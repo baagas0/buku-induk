@@ -61,7 +61,7 @@ class Teacher extends Authenticatable
 
     public function getLmapelAttribute()
     {
-        $mapel = json_decode($this->attributes['mapel']);
+        $mapel = json_decode($this->getRawOriginal('mapel'));
 
         return $mapel;
     }

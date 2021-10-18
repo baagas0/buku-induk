@@ -17,11 +17,13 @@ use Auth;
 
 class NilaiController extends Controller
 {
-    public function getInput(){
+    public function getInput()
+    {
         $data['kelompok'] = Kelompok::get();
         return view('teacher.nilai.main', $data);
     }
-    public function getAnalisis(Request $request){
+    public function getAnalisis(Request $request)
+    {
         $data['kelas']      = Kelas::get();
         $semester = $request->get('semester');
         $tahun_pelajaran = $request->get('tahun_pelajaran');
@@ -31,11 +33,11 @@ class NilaiController extends Controller
 
         $data['kelompok'] = Kelompok::get();
         $nilai      = Nilai::query();
-        if($semester){
+        if ($semester) {
             $nilai->where('semester', $semester);
         }
-        $nilai->whereHas('master' , function($q) use ($tahun_pelajaran,$mapel, $ms) {
-            if($tahun_pelajaran){
+        $nilai->whereHas('master', function ($q) use ($tahun_pelajaran, $mapel, $ms) {
+            if ($tahun_pelajaran) {
                 $q->where('th_pelajaran', $tahun_pelajaran);
             }
             if ($mapel) {
@@ -45,22 +47,27 @@ class NilaiController extends Controller
                 ]);
             }
         });
-        $nilai->whereHas('student', function($q) use($kelas_id) {
+        $nilai->whereHas('student', function ($q) use ($kelas_id) {
             if ($kelas_id) {
                 $q->where('kelas_id', $kelas_id);
             }
         });
-        if(!$semester){
+        if (!$semester) {
             $nilai->limit(0);
         }
         $data['nilai'] = $nilai->get();
         return view('teacher.nilai.analisis', $data);
     }
 
-    public function postProccessInput(Request $request){
+    public function postProccessInput(Request $request)
+    {
         $data = $request->all();
-        
+
         $import = Excel::import(new NilaiImport($data), $request->file_nilai, null, \Maatwebsite\Excel\Excel::XLSX);
-        dd($import);
+
+        return redirect()->back()->with([
+            'type' => 'success',
+            'msg' => 'Data berhasil diproses'
+        ]);
     }
 }

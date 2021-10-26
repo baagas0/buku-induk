@@ -22,7 +22,8 @@ class RaporPdfExport extends Model
         'htmlStatus',
     ];
 
-    public function getProgressAttribute(){
+    public function getProgressAttribute()
+    {
         $on_going_job   = $this->on_going_job;
         $count_job      = $this->count_job;
 
@@ -30,30 +31,32 @@ class RaporPdfExport extends Model
             return 5;
         }
 
-        if ($on_going_job== 0 || $count_job== 0) {
+        if ($on_going_job == 0 || $count_job == 0) {
             return 0;
         }
 
         return ($on_going_job / $count_job) * 100;
     }
 
-    public function getStateAttribute(){
+    public function getStateAttribute()
+    {
         if ($this->progress <= 30) {
             $return = 'danger';
-        }else if ($this->progress <= 60) {
+        } else if ($this->progress <= 60) {
             $return = 'warning';
-        }else if ($this->progress <= 80) {
+        } else if ($this->progress <= 80) {
             $return = 'info';
-        }else if ($this->progress <= 100) {
+        } else if ($this->progress <= 100) {
             $return = 'success';
-        }else{
+        } else {
             $return = 'dark';
         }
 
         return $return;
     }
 
-    public function gethtmlStatusAttribute(){
+    public function gethtmlStatusAttribute()
+    {
         $s = $this->status;
         $state = [
             'pending'   => ['title' => 'Pending',       'state' => 'warning'],
@@ -62,8 +65,8 @@ class RaporPdfExport extends Model
             'error'     => ['title' => 'error',         'state' => 'danger'],
         ];
 
-        return '<span class="label label-' .$state[$s]['state']. ' label-dot mr-2"></span><span class="font-weight-bold text-' .$state[$s]['state'].
-                            '">' .$state[$s]['title']. '</span>';
+        return '<span class="label label-' . $state[$s]['state'] . ' label-dot mr-2"></span><span class="font-weight-bold text-' . $state[$s]['state'] .
+            '">' . $state[$s]['title'] . '</span>';
     }
 
     public function kelas()
@@ -75,7 +78,8 @@ class RaporPdfExport extends Model
         return $this->hasOne('App\Master', 'id', 'created_by');
     }
 
-    public static function getToken(){
+    public static function getToken()
+    {
         $length = 8;
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -91,13 +95,22 @@ class RaporPdfExport extends Model
         }
     }
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
-        static::creating(function ($model){
+        static::creating(function ($model) {
             $model->token = RaporPdfExport::getToken();
             $model->created_by = Auth::guard('master')->user() ? Auth::guard('master')->user()->id : 1;
 
+            $data['token'] = $model->token;
+            $data['kelas_id'] = $model->kelas_id;
+            $data['th_pelajaran'] = $model->th_pelajaran;
+
+            MultiPdfGenerate::dispatch($data);
+        });
+
+        static::created(function ($model) {
             $data['token'] = $model->token;
             $data['kelas_id'] = $model->kelas_id;
             $data['th_pelajaran'] = $model->th_pelajaran;

@@ -101,7 +101,7 @@
 							<div class="flex-grow-1 bg-danger p-8 card-rounded flex-grow-1 bgi-no-repeat" style="background-position: calc(100% + 0.5rem) bottom; background-size: auto 70%; background-image: url({{ asset('assets/media/svg/humans/custom-3.svg')}})">
 								<h4 class="text-inverse-danger mt-2 font-weight-bolder">Download ZIP</h4>
 								<p class="text-inverse-danger my-6">Download semua file .pdf dalam satu ketukan.</p>
-									<a href="{{ $raporPdf->progress == 100 ? route('master.e-rapor.zip', $raporPdf->token) : 'javascript:void' }}" class="btn btn-warning font-weight-bold py-2 px-6">Download</a>
+									<a href="{{ $raporPdf->progress == 100 ? route('master.pdf.zip', $raporPdf->token) : 'javascript:void' }}" class="btn btn-warning font-weight-bold py-2 px-6">Download</a>
 							</div>
 						</div>
 					</div>
@@ -200,7 +200,7 @@
 					</div>
 				</div>
 				<!--end::Example-->
-				
+
 			</div>
 		</div>
 	</div>
@@ -219,7 +219,7 @@
 
 						<div class="timeline timeline-2">
 						    <div class="timeline-bar"></div>
-						    
+
 						    @foreach($historyPdf->where('type', 'student')->get() as $key => $row)
 						    <div class="timeline-item">
 						        <span class="timeline-badge bg-success"></span>
@@ -232,14 +232,14 @@
 						        </div>
 						    </div>
 						    @endforeach
-						    
+
 						</div>
 
 
 					</div>
 				</div>
 				<!--end::Example-->
-				
+
 			</div>
 		</div>
 	</div>

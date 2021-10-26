@@ -20,6 +20,13 @@
 </li>
 
 <li class="menu-item">
+	<a href="/teacher/jurnal" class="menu-link">
+		<span class="menu-text">Jurnal</span>
+		<i class="menu-arrow"></i>
+	</a>
+</li>
+
+<li class="menu-item">
 	<a href="/teacher/mapel" class="menu-link">
 		<span class="menu-text">Mapel</span>
 		<i class="menu-arrow"></i>

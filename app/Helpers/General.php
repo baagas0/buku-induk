@@ -2,6 +2,8 @@
 
 use App\Instruction;
 use App\Setting;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 if (!function_exists('routeController')) {
 
@@ -145,6 +147,20 @@ if (!function_exists('dataCount')) {
      */
     function dataCount($table)
     {
-        return \DB::table($table)->count();
+        return DB::table($table)->count();
+    }
+}
+
+if (!function_exists('carbon')) {
+
+    /**
+     * description
+     *
+     * @param
+     * @return
+     */
+    function carbon($date)
+    {
+        return Carbon::parse($date);
     }
 }

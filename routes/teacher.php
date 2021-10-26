@@ -7,6 +7,8 @@ Route::group(['middleware' => ['auth:teacher'], 'namespace' => 'Teacher', 'as' =
 
     routeController('profile', 'Teacher\ProfileController');
 
+    routeController('jurnal', 'Teacher\JurnalController');
+
     routeController('nilai', 'Teacher\NilaiController');
     routeController('upd', 'Teacher\UpdController');
     routeController('akhlak', 'Teacher\AkhlakController');

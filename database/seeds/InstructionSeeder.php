@@ -19,7 +19,7 @@ class InstructionSeeder extends Seeder
             ],
             [
                 'slug'  => 'import_student_page',
-                'value' => '1. download template excel dari <a href="' . asset('import data siswa.xlsx') . '" >sini</a><br>2. Edit data NIS, Nama, Kelas, Email (dapat dikosongkan) sesuai dengan data diri siswa<br>3. Pastikan tidak ada duplikat NIS dan Email<br>4.Simpan dan upload file tadi ke form section<br>5. Klik Submit untuk memproses file',
+                'value' => '1. download template excel dari <a href="/import data siswa.xlsx" >sini</a><br>2. Edit data NIS, Nama, Kelas, Email (dapat dikosongkan) sesuai dengan data diri siswa<br>3. Pastikan tidak ada duplikat NIS dan Email<br>4.Simpan dan upload file tadi ke form section<br>5. Klik Submit untuk memproses file',
             ],
             [
                 'slug'  => 'pdf_management_page',
@@ -40,6 +40,10 @@ class InstructionSeeder extends Seeder
             [
                 'slug'  => 'analisis_page',
                 'value' => 'Masukan data yang diperlukan seperti data semester, tahun pelajaran, mata pelajaran, kelas untuk menampilkan data nilai siswa permasing masing kelas',
+            ],
+            [
+                'slug'  => 'jurnal_page',
+                'value' => 'Memuat data jurnal kelas sehingga pihak sekolah dapat dengan mudah memonitoring siswa.<br>Jika anda adalah wali kelas maka anda bisa melihat catatan jurnal dari seluruh mata pelajaran, namun jika bukan anda hanya dapat melihat sesuai dengan mata pelajaran anda.',
             ],
         ];
 

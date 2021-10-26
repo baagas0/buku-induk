@@ -23,9 +23,9 @@ class KelulusanResource extends ResourceCollection
     {
         return [
             'meta' => [
-                // 'page' => $this->currentPage(),
-                // 'pages' => $this->lastPage(),
-                // 'perpage' => $this->perPage(),
+                'page' => $this->currentPage(),
+                'pages' => $this->lastPage(),
+                'perpage' => $this->perPage(),
                 'sort' => 'asc',
                 'field' => 'id',
             ],

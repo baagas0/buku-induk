@@ -20,6 +20,7 @@ class TeacherSeeder extends Seeder
         $t->save();
 
         $t = new Teacher;
+        $t->kelas_id = 1;
         $t->name = 'Joko Agung Sayuto Spd, Mpd';
         $t->email = 'sayuto@mail.com';
         $t->password = bcrypt(12345);

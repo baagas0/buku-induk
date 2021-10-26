@@ -102,12 +102,6 @@ class RaporPdfExport extends Model
         static::creating(function ($model) {
             $model->token = RaporPdfExport::getToken();
             $model->created_by = Auth::guard('master')->user() ? Auth::guard('master')->user()->id : 1;
-
-            $data['token'] = $model->token;
-            $data['kelas_id'] = $model->kelas_id;
-            $data['th_pelajaran'] = $model->th_pelajaran;
-
-            MultiPdfGenerate::dispatch($data);
         });
 
         static::created(function ($model) {

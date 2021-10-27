@@ -1,6 +1,6 @@
 <?php
 
-Route::group(['middleware' => 'auth:master','namespace' => 'Master', 'as' => 'master.'], function() {
+Route::group(['middleware' => 'auth:master', 'namespace' => 'Master', 'as' => 'master.'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     routeController('mapel', 'Master\MapelController');
     routeController('student', 'Master\StudentController');
@@ -9,17 +9,18 @@ Route::group(['middleware' => 'auth:master','namespace' => 'Master', 'as' => 'ma
     routeController('hasil_ujian', 'Master\HasilUjianController');
 
     routeController('pdf', 'Master\PdfController');
+    routeController('jurnal', 'Master\JurnalController');
 
     routeController('setting', 'Master\SettingController');
 
-    Route::group(['namespace' => 'Pengguna', 'as' => 'user.'], function() {
+    Route::group(['namespace' => 'Pengguna', 'as' => 'user.'], function () {
         routeController('teacher', 'Master\Pengguna\TeacherController');
         routeController('master', 'Master\Pengguna\MasterController');
         routeController('kelas', 'Master\Pengguna\KelasController');
     });
 });
 
-Route::group(['namespace' => 'Master'], function() {
+Route::group(['namespace' => 'Master'], function () {
     // Dashboard
 
     // Login

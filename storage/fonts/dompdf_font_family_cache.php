@@ -113,4 +113,7 @@
     'normal' => $fontDir . '/font_awesome_5_free_normal_658e19ae4a7394bfeb8a7bac705f0a6b',
     '900' => $fontDir . '/font_awesome_5_free_900_e4eab0bc720d5fd51c1a5596e0e7a833',
   ),
+  'glyphicons halflings' => array(
+    'normal' => $fontDir . '/glyphicons_halflings_normal_649b202ffed83c4604c4cf7c88e441bc',
+  ),
 ) ?>

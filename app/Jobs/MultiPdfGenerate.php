@@ -56,7 +56,7 @@ class MultiPdfGenerate implements ShouldQueue
         $token = $this->data['token'];
         $data['tahunpelajaran'] = json_decode($dataPdf['th_pelajaran']);
         $students = Student::where('kelas_id', $dataPdf['kelas_id'])->get();
-        
+
         $RaporPdfExport = RaporPdfExport::where('token', $token)->first();
         RaporPdfExportHistory::create([
             'rapor_pdf_exports_id' => $RaporPdfExport->id,
@@ -72,7 +72,7 @@ class MultiPdfGenerate implements ShouldQueue
         foreach ($students as $key => $student) {
             $data['nilai'] = DB::select("
                 SELECT a.code,a.name as nmkel, b.name,b.id as nameid,  b.is_sub, c.name as subname, c.id as subnameid
-                from kelompoks a 
+                from kelompoks a
                 left join mapels b on a.id=b.kelompok_id
                 left join sub_mapels c on b.id = c.mapel_id
                 ");
@@ -80,9 +80,9 @@ class MultiPdfGenerate implements ShouldQueue
             $data['upds'] = UpdScore::where([
                 'student_id'        => $student->id,
             ])
-            ->whereIn('th_pelajaran', $data['tahunpelajaran'])
-            ->get()
-            ->groupBy('upd_id');
+                ->whereIn('th_pelajaran', $data['tahunpelajaran'])
+                ->get()
+                ->groupBy('upd_id');
 
             $data['aspeks'] = Aspek::get();
 
@@ -93,18 +93,24 @@ class MultiPdfGenerate implements ShouldQueue
             $data['kelulusans'] = Kelulusan::where([
                 'student_id'        => $student->id,
             ])
-            ->get();
+                ->get();
             $data['kelompoks'] = Kelompok::with('mapel')->get();
             $data['student'] = $student;
 
             RaporPdfExport::where('token', $token)->first()
-            ->increment('on_going_job', 1);
+                ->increment('on_going_job', 1);
 
-            $pdf = PDF::loadView('pdf.nilai.try', $data);
-            $pdf->setOption('page-width', '210');
-            $pdf->setOption('page-height', '330');
+            $pdf = PDF::loadView('pdf.nilai.try', $data, [], [
+                'title' => $student->nis . ' - ' . $student->name,
+                'author'         => 'Applikasi ini dibuat oleh Bagas Aditya Mahendra',
+                'margin_left'    => 7,
+                'margin_right'   => 7,
+                'margin_top'     => 5,
+                'margin_bottom'  => 7,
+                'margin_footer'  => 2,
+            ]);
 
-            Storage::put('public/pdf/'.$token.'/'.$student->nis.' - '.$student->name.'.pdf', $pdf->output());
+            Storage::put('public/pdf/' . $token . '/' . $student->nis . ' - ' . $student->name . '.pdf', $pdf->output());
 
             RaporPdfExportHistory::create([
                 'rapor_pdf_exports_id' => $RaporPdfExport->id,
@@ -131,7 +137,8 @@ class MultiPdfGenerate implements ShouldQueue
      * @param  \Throwable  $exception
      * @return void
      */
-    public function failed(\Throwable  $exception) {
+    public function failed(\Throwable  $exception)
+    {
         $RaporPdfExport = RaporPdfExport::where('token', $this->data['token'])->first();
 
         RaporPdfExportHistory::create([
@@ -145,7 +152,8 @@ class MultiPdfGenerate implements ShouldQueue
         ]);
     }
 
-    public function RaporPdfData($data) {
+    public function RaporPdfData($data)
+    {
         $RaporPdfExport = RaporPdfExport::where('token', $this->data['token']);
         $RaporPdfExport->update($data);
     }

@@ -31,11 +31,19 @@
 @endif
 
 <li class="menu-item">
+	<a href="{{ route('master.jurnal') }}" class="menu-link">
+		<span class="menu-text">Jurnal</span>
+		<i class="menu-arrow"></i>
+	</a>
+</li>
+
+<li class="menu-item">
 	<a href="{{ route('master.mapel') }}" class="menu-link">
 		<span class="menu-text">Mapel</span>
 		<i class="menu-arrow"></i>
 	</a>
 </li>
+
 @if(auth()->user()->role->name == 'Tata Usaha')
 <li class="menu-item menu-item-submenu menu-item-rel" data-menu-toggle="click" aria-haspopup="true">
 	<a href="javascript:;" class="menu-link menu-toggle">

@@ -1,0 +1,701 @@
+@extends('master.layouts.app')
+@push('title', 'Jurnal Kelas')
+@section('instruction', 'jurnal_page')
+@section('content')
+@php
+$semester = Request::get('semester');
+$tahun_pelajaran = Request::get('tahun_pelajaran');
+$gmapel = Request::get('mapel');
+$kelas_id = Request::get('kelas_id');
+@endphp
+    <!--begin::Card-->
+    <div class="card card-custom">
+        <div class="card-header flex-wrap border-0 pt-6 pb-0">
+            <div class="card-title">
+                <h3 class="card-label">Daftar Jurnal Kelas
+                <span class="d-block text-muted pt-2 font-size-sm">Klik icon panah untuk melihat daftar siswa</span></h3>
+            </div>
+            <div class="card-toolbar">
+            </div>
+        </div>
+        <div class="card-body">
+            <!--begin: Search Form-->
+            <!--begin::Search Form-->
+            <div class="mb-7">
+                <div class="row align-items-center">
+                    <div class="col-lg-9 col-xl-8">
+                        <div class="row align-items-center">
+                            <div class="col-md-6 my-2 my-md-0">
+                                <div class="input-icon">
+                                    <input type="text" class="form-control" id="kt_datatable_search_date" readonly  placeholder="Select date"/>
+                                    <span>
+                                        <i class="flaticon-calendar text-muted"></i>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6 my-2 my-md-0">
+                                <div class="d-flex align-items-center">
+                                    <label class="mr-3 mb-0 d-none d-md-block">Kelas:</label>
+                                    <select class="form-control" id="kt_datatable_search_kelas">
+                                        <option value="">Semua</option>
+                                        @foreach ($kelas as $row)
+                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
+                        <button type="button" class="btn btn-light-primary px-6 font-weight-bold" onclick="$('#mainTableRefresh').trigger('click')">Search</a>
+                        <button type="button" class="btn btn-light-warning px-6 font-weight-bold ml-3" id="mainTableRefresh">Refresh</a>
+                    </div>
+                </div>
+            </div>
+            <!--end::Search Form-->
+            <!--end: Search Form-->
+            <!--begin: Datatable-->
+            <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
+            <!--end: Datatable-->
+        </div>
+
+        <div class="modal fade" id="add_jurnal_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="add_jurnal_modal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content modal-dialog-scrollable">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Jurnal</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body pb-0 row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Kelas</label>
+                                <br>
+                                <select class="form-control select2" id="jurnal_kelas_id" name="jurnal_kelas_id" style="width:100%!important">
+                                    <option value="0">==Pilih Kelas==</option>
+                                    @foreach($kelas as $row)
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Mata Pelajaran</label>
+                                <select class="form-control select2" id="jurnal_mapel" name="jurnal_mapel" style="width:100%!important">
+                                    <option value="0,0">==Pilih Mapel==</option>
+                                    @foreach($kelompok as $row)
+                                    <?php $mapels = App\Mapel::where('kelompok_id', $row->id)->get() ?>
+                                    @if(count($mapels) != 0)
+                                    <optgroup label="{{ $row->name }}">
+                                        @foreach($mapels as $mapel)
+                                            @if($mapel->is_sub == 0)
+                                                <option value="{{ $mapel->id }},0" {{ $gmapel == $mapel->id.',0' ? 'selected' : '' }}>{{ $mapel->name }}</option>
+                                            @else
+                                            <?php $submapels = App\SubMapel::where('mapel_id', $mapel->id)->get() ?>
+                                                <optgroup label="{{ $mapel->name }}">
+                                                    @foreach($submapels as $submapel)
+                                                    <option value="0,{{ $submapel->id }}" {{ $gmapel == '0,'.$submapel->id ? 'selected' : '' }}>{{ $submapel->name }}</option>
+                                                    @endforeach
+                                                </optgroup>
+                                            @endif
+                                        @endforeach
+                                    </optgroup>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Pilih Tanggal:</label>
+                                <div class="input-group date">
+                                    <input type="text" class="form-control" id="jurnal_date" readonly  placeholder="Pilih Tanggal"/>
+                                    <div class="input-group-append">
+                                    <span class="input-group-text">
+                                        <i class="la la-calendar-check-o"></i>
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Jam Ke:</label>
+                                <input type="number" class="form-control" id="jurnal_jam_ke" name="jurnal_jam_ke" placeholder="Jam Ke"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleTextarea">Materi</label>
+                                <textarea class="form-control" id="jurnal_materi" rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body pt-0">
+                                <!--begin: Search Form-->
+                                <div >
+
+                                    <h3 class="card-label"><i class="flaticon-users text-primary"></i> Daftar Siswa</h3>
+                                </div>
+
+                                <!--begin::Search Form-->
+                                <div class="mb-7">
+                                    <div class="row align-items-center">
+                                        <div class="col-lg-12 col-xl-12">
+                                            <div class="row align-items-center">
+                                                <div class="col-md-12 my-2 my-md-0">
+                                                    <div class="input-icon">
+                                                        <input type="text" class="form-control" placeholder="Cari Siswa..." id="kt_datatable_search_query_2" />
+                                                        <span>
+                                                            <i class="flaticon2-search-1 text-muted"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--begin: Datatable-->
+                                <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable_2"></div>
+                                <!--end: Datatable-->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary font-weight-bold" id="add_jurnal_save">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="add_jurnal_keterangan_modal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdrop" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Keterangan Siswa</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i aria-hidden="true" class="ki ki-close"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" hidden>
+                            <label>ID</label>
+                            <input type="number" class="form-control" id="jurnal_keterangan_id" readonly placeholder="ID Student"/>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Siswa</label>
+                            <input type="text" class="form-control" id="jurnal_keterangan_name" readonly placeholder="Student Name"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleTextarea">Keterangan</label>
+                            <textarea class="form-control" id="jurnal_keterangan" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-primary font-weight-bold" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary font-weight-bold" id="jurnal_keterangan_save">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Card-->
+@endsection
+@push('css')
+{{-- <link href="/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" /> --}}
+@endpush
+@push('js')
+{{-- <script src="/assets/js/pages/crud/file-upload/dropzonejs.js"></script> --}}
+{{-- <script src="/assets/js/pages/crud/ktdatatable/base/html-table.js"></script> --}}
+{{-- <script src="/assets/plugins/custom/datatables/datatables.bundle.js"></script> --}}
+<script>
+	var KTpage = function() {
+		var select = function() {
+			$('#jurnal_mapel').select2({
+				width: '100%',
+				placeholder: "Pilih Mapel"
+			});
+			$('#jurnal_kelas_id').select2({
+                width: '100%',
+				placeholder: "Pilih Kelas"
+			});
+		}
+		var form_mask = function () {
+			$("#th_pelajaran").inputmask("9999", {
+				"placeholder": "yyyy",
+				autoUnmask: true
+			});
+		}
+		var date = function() {
+            var start = moment().subtract(29, 'days');
+            var end = moment();
+            var arrows = {
+                leftArrow: '<i class="la la-angle-left"></i>',
+                rightArrow: '<i class="la la-angle-right"></i>'
+            }
+			$('#kt_datatable_search_date').daterangepicker({
+                buttonClasses: ' btn',
+                applyClass: 'btn-primary',
+                cancelClass: 'btn-secondary',
+
+                startDate: start,
+                endDate: end,
+                ranges: {
+                    'Hari ini': [moment(), moment()],
+                    'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    '7 Hari Terakhir': [moment().subtract(6, 'days'), moment()],
+                    '30 Hari Terakhir': [moment().subtract(29, 'days'), moment()],
+                    'Bulan ini': [moment().startOf('month'), moment().endOf('month')],
+                    'Bulan lalu': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                }
+            }, function(start, end, label) {
+                $('#date .form-control').val( start.format('DD/MM/YYYY') + ' / ' + end.format('DD/MM/YYYY'));
+            });
+
+            $('#jurnal_date').datepicker({
+                todayHighlight: true,
+                orientation: "bottom left",
+                templates: arrows
+            });
+		}
+        var mainTable = function() {
+
+            var datatable = $('#kt_datatable').KTDatatable({
+                // datasource definition
+                data: {
+                    type: 'remote',
+                    source: {
+                        read: {
+                            url: '{{ route('master.jurnal.data') }}',
+                            params: {
+                                date: $('#date').val(),
+                            },
+                        },
+                    },
+                    pageSize: 10, // display 20 records per page
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true,
+                },
+
+                // layout definition
+                layout: {
+                    scroll: true,
+                    footer: false,
+                },
+
+                translate:{
+                    records:{
+                        noRecords: 'Jurnal tidak ditermukan',
+                    },
+                },
+
+                // column sorting
+                sortable: true,
+
+                pagination: true,
+
+                detail: {
+                    title: 'Load sub table',
+                    content: subTableInit,
+                },
+
+                search: {
+                    input: $('#kt_datatable_search_date'),
+                    key: 'date'
+                },
+
+                // columns definition
+                columns: [
+                    {
+                        field: 'id',
+                        title: '',
+                        sortable: false,
+                        width: 30,
+                        textAlign: 'center',
+                    }, {
+                        field: 'day',
+                        title: 'Hari',
+                        sortable: 'asc',
+                    }, {
+                        field: 'date',
+                        title: 'Date',
+                        sortable: 'asc',
+                    }, {
+                        field: 'jam_ke',
+                        title: 'Jam Ke',
+                    }, {
+                        field: 'kelas.name',
+                        title: 'Kelas',
+                    }, {
+                        field: 'data',
+                        title: 'Mapel',
+                        template: function(row) {
+                            if(row.sub_mapel != null) {
+                                return row.sub_mapel.name;
+                            }else {
+                                return row.mapel.name;
+                            }
+                        }
+                    }, {
+                        field: 'materi',
+                        title: 'Materi',
+                    },{
+                        field: 'Actions',
+                        width: 125,
+                        title: 'Actions',
+                        sortable: false,
+                        overflow: 'visible',
+                        autoHide: false,
+                        template: function() {
+                            return `
+                                <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">
+                                    <span class="svg-icon svg-icon-md">
+                                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24"/>
+                                                <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"/>
+                                                <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </a>
+                            `;
+                        },
+                    }],
+            });
+
+            $('#kt_datatable_search_date').on('change', function() {
+                datatable.search($(this).val().toLowerCase(), 'date');
+            });
+
+            $('#kt_datatable_search_kelas').on('change', function() {
+                datatable.search($(this).val().toLowerCase(), 'kelas_id');
+            });
+
+            $('#mainTableRefresh').on('click', function() {
+                datatable.reload();
+            });
+
+            $('#kt_datatable_search_kelas').selectpicker();
+
+
+            function subTableInit(e) {
+                $('<div/>').attr('id', 'child_data_ajax_' + e.data.id).appendTo(e.detailCell).KTDatatable({
+                    data: {
+                        type: 'remote',
+                        source: {
+                            read: {
+                                url: '{{ route('master.jurnal.data.jurnal.student') }}',
+                                params: {
+                                    // custom query params
+                                    jurnal_id: e.data.id,
+                                    query: {
+                                    },
+                                },
+                            },
+                        },
+                        pageSize: 5,
+                        serverPaging: true,
+                        serverFiltering: false,
+                        serverSorting: true,
+                    },
+
+                    // layout definition
+                    layout: {
+                        scroll: false,
+                        footer: false,
+
+                        // enable/disable datatable spinner.
+                        spinner: {
+                            type: 1,
+                            theme: 'default',
+                        },
+                    },
+
+                    // Translate text
+                    translate: {
+                        records: {
+                            processing: 'Loading...',
+                            noRecords: 'Tidak ada siswa yang berhalangan',
+                        }
+                    },
+
+                    sortable: true,
+
+                    // columns definition
+                    columns: [
+                        {
+                            field: 'id',
+                            title: '#',
+                            sortable: false,
+                            width: 30,
+                        },
+                        {
+                            field: 'student.name',
+                            title: 'Nama'
+                        },
+                        {
+                            field: 'keterangan',
+                            title: 'Keterangan'
+                        },
+                    ],
+                });
+            }
+        };
+
+        var jurnalTable = function() {
+            var jurnal_student = [];
+
+            var datatable = $('#kt_datatable_2').KTDatatable({
+                // datasource definition
+                data: {
+                    type: 'remote',
+                    source: {
+                        read: {
+                            url: `{{ route('master.jurnal.data.student') }}`,
+                            params: {
+                                kelas_id:0,
+                            }
+                        },
+                    },
+                    pageSize: 10,
+                    serverPaging: true,
+                    serverFiltering: true,
+                    serverSorting: true,
+                },
+
+                // layout definition
+                layout: {
+                    // header: false,
+                    scroll: true, // enable/disable datatable scroll both horizontal and
+                    footer: false, // display/hide footer
+                    maxheight: 400,
+                },
+
+                // Toolbar Setting
+                toolbar: {
+                    items: {
+                        pagination: {
+                            pageSizeSelect: [5],
+                        },
+                    },
+                },
+
+                // Translate text
+                translate: {
+                    records: {
+                        processing: 'Loading...',
+                        noRecords: 'Data tidak ditemukan',
+                    }
+                },
+
+                // column sorting
+                sortable: true,
+
+                pagination: true,
+
+                // enable extension
+                extensions: {
+                    // boolean or object (extension options)
+                    checkbox: true,
+                },
+                search: {
+                    input: $('#kt_datatable_search_query_2'),
+                    key: 'searchLike',
+                },
+
+                // columns definition
+                columns: [
+                    {
+                        field: 'id',
+                        title: '#',
+                        sortable: false,
+                        width: 5,
+                        selector: true,
+                        textAlign: 'center',
+                        autoHide: false,
+                    },
+                    {
+                        field: 'nis',
+                        title: 'NIS',
+                    },
+                    {
+                        field: 'name',
+                        title: 'Nama Siswa',
+                    },
+                ],
+            });
+
+            datatable.on(
+                'datatable-on-init',
+            function(e, row) {
+                // $('#kt_datatable_2 .datatable-head .datatable-cell-check').hide();
+                var kelas_id_index = datatable.getDataSourceParam('kelas_id');
+                $('#jurnal_kelas_id').val(kelas_id_index).change();
+                // console.log(kelas_id_index);
+            });
+
+            function resetForm() {
+                jurnal_student = null;
+                $('#jurnal_kelas_id').val('0').change();
+                $('#jurnal_mapel').val('0,0').change();
+                $('#jurnal_date').val('');
+                $('#jurnal_jam_ke').val('');
+                $('#jurnal_materi').val('');
+                $('#kt_datatable_search_query_2').val('');
+            }
+
+            $('#jurnal_kelas_id').on('change', function() {
+                jurnal_student = [];
+                var e = $(this).val();
+                datatable.setDataSourceParam('kelas_id', e);
+                datatable.load();
+            });
+
+            $('#kt_datatable_search_status_2').on('change', function() {
+                datatable.search($(this).val().toLowerCase(), 'Status');
+            });
+
+            $('#kt_datatable_search_type_2').on('change', function() {
+                datatable.search($(this).val().toLowerCase(), 'Type');
+            });
+
+            $('#add_jurnal_modal').on('show.bs.modal', function(e) {
+                resetForm();
+                datatable.load();
+            })
+
+            $('#add_jurnal_modal').on('hidden.bs.modal', function (e) {
+                resetForm();
+            })
+
+            $('#kt_datatable_search_status_2, #kt_datatable_search_type_2').selectpicker();
+
+            datatable.on(
+                'datatable-on-click-checkbox',
+            function(e, row) {
+                var element = row[0];
+                var id = element.value;
+
+                if(id == 'on'){
+                    datatable.setActiveAll(false);
+                    console.log(jurnal_student);
+                    for(var index in jurnal_student) {
+                        var id = jurnal_student[index].student_id;
+                        datatable.setActive(id);
+                    }
+                    Swal.fire("Notifikasi!", "Tidak dapat memilih banyak sekaligus.", "warning");
+                }else {
+                    if(element.checked == true){
+                        $('#jurnal_keterangan_id').val(id);
+                        $('#add_jurnal_keterangan_modal').modal('show');
+                    }else {
+                        datatable.setInactive(id);
+                        jurnal_student.splice(id);
+                        console.log(jurnal_student);
+                    }
+                }
+            });
+
+            function empty_modal_keterangan() {
+                var id = $('#jurnal_keterangan_id').val('');
+                var name = $('#jurnal_keterangan_name').val('');
+                var keterangan = $('#jurnal_keterangan').val('');
+            }
+
+            $('#add_jurnal_keterangan_modal').on('show.bs.modal', function(e) {
+                var id = $('#jurnal_keterangan_id').val();
+                var name = datatable.getRecord(id).getColumn('name').getValue();
+
+                $('#jurnal_keterangan_name').val(name);
+            }).on('hide.bs.modal', function(e) {
+                var id = $('#jurnal_keterangan_id').val();
+                datatable.setInactive(id);
+                empty_modal_keterangan();
+            });
+
+            $('#jurnal_keterangan_save').on('click', function() {
+                var id = $('#jurnal_keterangan_id').val();
+                var keterangan = $('#jurnal_keterangan').val();
+
+                jurnal_student[id] = {
+                    'student_id': id,
+                    'keterangan': keterangan,
+                };
+                empty_modal_keterangan();
+
+                $('#add_jurnal_keterangan_modal').modal('hide');
+                console.log(jurnal_student);
+            });
+
+            $('#add_jurnal_save').on('click', function() {
+                var date = $('#jurnal_date').val();
+                var jam_ke = $('#jurnal_jam_ke').val();
+                var mapel = $('#jurnal_mapel').val();
+                var kelas_id = $('#jurnal_kelas_id').val();
+                var materi = $('#jurnal_materi').val();
+
+                if(date == "" || jam_ke == ""  || materi == "") {
+                    Swal.fire("Error!", "Periksa data inputan anda", "error");
+                    return;
+                }
+                var data = {
+                    date: date,
+                    jam_ke: jam_ke,
+                    mapel: mapel,
+                    kelas_id: kelas_id,
+                    materi: materi,
+                    jurnal_student: jurnal_student,
+                };
+
+                Swal.fire({
+                    title: "Konfirmasi pengiriman data!",
+                    text: "Apakah anda yakin bahwa data sudah benar?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya!",
+                    cancelButtonText: "Tidak!"
+                }).then(function(result) {
+                    if (result.value) {
+                        $.ajax({
+                            url: "{{ route('master.jurnal.save') }}",
+                            type: "POST",
+                            data: data,
+                            success: function(response){
+                                $('#mainTableRefresh').trigger('click');
+                                $('#add_jurnal_modal').modal('hide');
+                                Swal.fire(
+                                    "Success!",
+                                    `${data.status}`,
+                                    "success"
+                                );
+                            },
+                            error: function(response){
+                                console.log(JSON.stringify(response.log));
+                                Swal.fire(
+                                    "Gagal!",
+                                    "Data gagal dimasukan, coba lagi!",
+                                    "error"
+                                )
+                            }
+                        });
+                    }else {
+
+                    }
+                });
+            });
+        }
+		return {
+			init: function() {
+				select();
+				form_mask();
+				date();
+                mainTable();
+                jurnalTable();
+			}
+		};
+	}();
+
+	jQuery(document).ready(function() {
+		KTpage.init();
+	});
+
+</script>
+@endpush

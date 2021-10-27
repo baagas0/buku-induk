@@ -166,7 +166,9 @@ return [
          * Package Service Providers...
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\Snappy\ServiceProvider::class,
+        // niklasravnsborg\LaravelPdf\PdfServiceProvider::class,
+        // Barryvdh\DomPDF\ServiceProvider::class,
+        // Barryvdh\Snappy\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -229,8 +231,10 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
-        'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
-        'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        // 'PDF' => Barryvdh\DomPDF\Facade::class,
+        // 'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
+        // 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        // 'PDF' => niklasravnsborg\LaravelPdf\Facades\Pdf::class
     ],
 
 ];

@@ -29,13 +29,14 @@
 	</a>
 </li> --}}
 @endif
-
+@if(auth()->user()->role->name == 'Wakakurikulum')
 <li class="menu-item">
 	<a href="{{ route('master.jurnal') }}" class="menu-link">
 		<span class="menu-text">Jurnal</span>
 		<i class="menu-arrow"></i>
 	</a>
 </li>
+@endif
 
 <li class="menu-item">
 	<a href="{{ route('master.mapel') }}" class="menu-link">

@@ -17,7 +17,11 @@ class Student extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name','kelas_id', 'nis', 'email', 'password',
+        'name', 'kelas_id', 'nis', 'email', 'password',
+    ];
+
+    protected $appends = [
+        'clone_id'
     ];
 
     /**
@@ -59,17 +63,23 @@ class Student extends Authenticatable
         $this->notify(new VerifyEmail);
     }
 
+    public function getCloneIdAttribute()
+    {
+        return $this->id;
+    }
+
     public function kelas()
     {
         return $this->hasOne('App\Kelas', 'id', 'kelas_id');
     }
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
-        static::created(function ($model){
+        static::created(function ($model) {
             Kelulusan::create([
-                'student_id'=> $model->id,
+                'student_id' => $model->id,
                 'uraian'    => 'Nomor',
                 'ijazah'    => null,
                 'skhun'     => null,
@@ -77,7 +87,7 @@ class Student extends Authenticatable
             ]);
 
             Kelulusan::create([
-                'student_id'=> $model->id,
+                'student_id' => $model->id,
                 'uraian'    => 'Penanggalan',
                 'ijazah'    => null,
                 'skhun'     => null,
@@ -85,7 +95,7 @@ class Student extends Authenticatable
             ]);
 
             Kelulusan::create([
-                'student_id'=> $model->id,
+                'student_id' => $model->id,
                 'uraian'    => 'Diberikan Tanggal',
                 'ijazah'    => null,
                 'skhun'     => null,

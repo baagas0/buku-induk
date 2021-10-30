@@ -57,7 +57,8 @@ class StudentController extends Controller
 
     public function postData(Request $req)
     {
-        Paginator::currentPageResolver(fn () => $req->pagination['page']);
+        $pagination = $req->pagination;
+        Paginator::currentPageResolver(fn () => $pagination['page']);
 
         $q = Student::with('kelas');
 
@@ -76,7 +77,7 @@ class StudentController extends Controller
                 }
             }
         }
-        return new StudentResource($q->paginate(10));
+        return new StudentResource($q->paginate($pagination['perpage']));
     }
     public function postDataUpd(Request $req, $id = null)
     {
@@ -92,6 +93,13 @@ class StudentController extends Controller
         $q = UpdScore::where('student_id', $student->id)->with('upd')->paginate(5);
 
         return new UpdResource($q);
+    }
+
+    public function postMultipleDelete(Request $request)
+    {
+        $ids = $request->ids;
+
+        $student = Student::whereIn('id', $ids)->delete();
     }
     public function postUpdateUpd($type = 'update', $id = 0, Request $req)
     {

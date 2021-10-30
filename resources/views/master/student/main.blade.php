@@ -147,6 +147,13 @@
 		</div>
 		<!--end::Search Form-->
 		<!--end: Search Form-->
+        <div class="mt-10 mb-5 collapse" id="kt_datatable_group_action_form_2">
+            <div class="d-flex align-items-center">
+                <div class="font-weight-bold text-danger mr-3">Memilih
+                <span id="kt_datatable_selected_records_2">0</span> siswa:</div>
+                <button class="btn btn-sm btn-danger mr-2" type="button" id="kt_datatable_delete_all">Hapus Semua</button>
+            </div>
+        </div>
 		<!--begin: Datatable-->
 		<div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
 		<!--end: Datatable-->
@@ -192,7 +199,7 @@ var KTDatatableChildRemoteDataDemo = function() {
 
 			// layout definition
 			layout: {
-				scroll: false,
+				scroll: true,
 				footer: false,
 
 				// enable/disable datatable spinner.
@@ -208,7 +215,7 @@ var KTDatatableChildRemoteDataDemo = function() {
 			pagination: true,
 
 			detail: {
-				title: 'Load sub table',
+				title: 'Menyiapkan data siswa',
 				content: subTableInit,
 			},
 
@@ -216,6 +223,17 @@ var KTDatatableChildRemoteDataDemo = function() {
 				input: $('#kt_datatable_search_query'),
 				key: 'like'
 			},
+
+            extensions: {
+                // boolean or object (extension options)
+                checkbox: {
+                    vars: {
+                        selectedAllRows: 'selectedAllRows',
+                        requestIds: 'data,id',
+                        rowIds: 'data.id',
+                    },
+                },
+            },
 
 			// columns definition
 			columns: [
@@ -225,6 +243,15 @@ var KTDatatableChildRemoteDataDemo = function() {
 					sortable: false,
 					width: 30,
 					textAlign: 'center',
+				},
+                {
+					field: 'clone_id',
+                    title: '#',
+                    sortable: false,
+                    width: 5,
+                    selector: true,
+                    textAlign: 'center',
+                    autoHide: false,
 				},
 				{
 					field: 'nis',
@@ -249,112 +276,96 @@ var KTDatatableChildRemoteDataDemo = function() {
 					overflow: 'visible',
 					autoHide: false,
 					template: function(row) {
-						return '\
-	                        <div class="dropdown dropdown-inline">\
-	                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
-	                                <span class="svg-icon svg-icon-md">\
-		                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
-		                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
-		                                <rect x="0" y="0" width="24" height="24"/>\
-		                                <path d="M8,17 C8.55228475,17 9,17.4477153 9,18 L9,21 C9,21.5522847 8.55228475,22 8,22 L3,22 C2.44771525,22 2,21.5522847 2,21 L2,18 C2,17.4477153 2.44771525,17 3,17 L3,16.5 C3,15.1192881 4.11928813,14 5.5,14 C6.88071187,14 8,15.1192881 8,16.5 L8,17 Z M5.5,15 C4.67157288,15 4,15.6715729 4,16.5 L4,17 L7,17 L7,16.5 C7,15.6715729 6.32842712,15 5.5,15 Z" fill="#000000" opacity="0.3"/>\
-		                                <path d="M2,11.8650466 L2,6 C2,4.34314575 3.34314575,3 5,3 L19,3 C20.6568542,3 22,4.34314575 22,6 L22,15 C22,15.0032706 21.9999948,15.0065399 21.9999843,15.009808 L22.0249378,15 L22.0249378,19.5857864 C22.0249378,20.1380712 21.5772226,20.5857864 21.0249378,20.5857864 C20.7597213,20.5857864 20.5053674,20.4804296 20.317831,20.2928932 L18.0249378,18 L12.9835977,18 C12.7263047,14.0909841 9.47412135,11 5.5,11 C4.23590829,11 3.04485894,11.3127315 2,11.8650466 Z M6,7 C5.44771525,7 5,7.44771525 5,8 C5,8.55228475 5.44771525,9 6,9 L15,9 C15.5522847,9 16,8.55228475 16,8 C16,7.44771525 15.5522847,7 15,7 L6,7 Z" fill="#000000"/>\
-		                                </g>\
-		                                </svg>\
-	                                </span>\
-	                            </a>\
-	                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-	                                <ul class="navi flex-column navi-hover py-2">\
-	                                    <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">\
-	                                        Pilih Aksi:\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="{{ route('master.student.view') }}/'+row.nis+'" class="navi-link">\
-	                                            <span class="navi-icon"><i class="la la-eye"></i></span>\
-	                                            <span class="navi-text">Lihat</span>\
-	                                        </a>\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="#" class="navi-link">\
-	                                            <span class="navi-icon"><i class="la la-file-pdf"></i></span>\
-	                                            <span class="navi-text">Download PDF</span>\
-	                                        </a>\
-	                                    </li>\
-	                                </ul>\
-	                            </div>\
-	                        </div>\
-	                        <div class="dropdown dropdown-inline">\
-	                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">\
-	                                <span class="svg-icon svg-icon-md">\
-		                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
-		                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
-		                                <rect x="0" y="0" width="24" height="24"/>\
-		                                <path d="M6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,12 C19,12.5522847 18.5522847,13 18,13 L6,13 C5.44771525,13 5,12.5522847 5,12 L5,3 C5,2.44771525 5.44771525,2 6,2 Z M7.5,5 C7.22385763,5 7,5.22385763 7,5.5 C7,5.77614237 7.22385763,6 7.5,6 L13.5,6 C13.7761424,6 14,5.77614237 14,5.5 C14,5.22385763 13.7761424,5 13.5,5 L7.5,5 Z M7.5,7 C7.22385763,7 7,7.22385763 7,7.5 C7,7.77614237 7.22385763,8 7.5,8 L10.5,8 C10.7761424,8 11,7.77614237 11,7.5 C11,7.22385763 10.7761424,7 10.5,7 L7.5,7 Z" fill="#000000" opacity="0.3"/>\
-		                                <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" fill="#000000"/>\
-		                                </g>\
-		                                </svg>\
-	                                </span>\
-	                            </a>\
-	                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">\
-	                                <ul class="navi flex-column navi-hover py-2">\
-	                                    <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">\
-	                                        Tambahkan data:\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="" class="navi-link" data-student-id="'+row.id+'" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateUPD">\
-	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>\
-	                                            <span class="navi-text">UPD</span>\
-	                                        </a>\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="" class="navi-link" data-student-id="'+row.id+'" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateAspek">\
-	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>\
-	                                            <span class="navi-text">Aspek & Akhlak</span>\
-	                                        </a>\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="" class="navi-link" data-student-id="'+row.id+'" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateKetidakhadiran">\
-	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>\
-	                                            <span class="navi-text">Ketidakhadiran</span>\
-	                                        </a>\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="" class="navi-link" data-student-id="'+row.id+'" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updatePrestasi">\
-	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>\
-	                                            <span class="navi-text">Prestasi</span>\
-	                                        </a>\
-	                                    </li>\
-	                                    <li class="navi-item">\
-	                                        <a href="" class="navi-link" data-student-id="'+row.id+'" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateKelulusan">\
-	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>\
-	                                            <span class="navi-text">Kelulusan</span>\
-	                                        </a>\
-	                                    </li>\
-	                                </ul>\
-	                            </div>\
-	                        </div>\
-	                        <a href="{{ route('master.student.detail') }}/personal/'+row.nis+'" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">\
-	                            <span class="svg-icon svg-icon-md">\
-	                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
-	                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
-	                                        <rect x="0" y="0" width="24" height="24"/>\
-	                                        <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero"\ transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "/>\
-	                                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"/>\
-	                                    </g>\
-	                                </svg>\
-	                            </span>\
-	                        </a>\
-	                        <a href="javascript:;" class="btn btn-sm btn-clean btn-icon" title="Delete">\
-	                            <span class="svg-icon svg-icon-md">\
-	                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">\
-	                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">\
-	                                        <rect x="0" y="0" width="24" height="24"/>\
-	                                        <path d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z" fill="#000000" fill-rule="nonzero"/>\
-	                                        <path d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z" fill="#000000" opacity="0.3"/>\
-	                                    </g>\
-	                                </svg>\
-	                            </span>\
-	                        </a>\
-	                    ';
+						return `
+	                        <div class="dropdown dropdown-inline">
+	                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+	                                <span class="svg-icon svg-icon-md">
+		                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+		                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		                                <rect x="0" y="0" width="24" height="24"/>
+		                                <path d="M8,17 C8.55228475,17 9,17.4477153 9,18 L9,21 C9,21.5522847 8.55228475,22 8,22 L3,22 C2.44771525,22 2,21.5522847 2,21 L2,18 C2,17.4477153 2.44771525,17 3,17 L3,16.5 C3,15.1192881 4.11928813,14 5.5,14 C6.88071187,14 8,15.1192881 8,16.5 L8,17 Z M5.5,15 C4.67157288,15 4,15.6715729 4,16.5 L4,17 L7,17 L7,16.5 C7,15.6715729 6.32842712,15 5.5,15 Z" fill="#000000" opacity="0.3"/>
+		                                <path d="M2,11.8650466 L2,6 C2,4.34314575 3.34314575,3 5,3 L19,3 C20.6568542,3 22,4.34314575 22,6 L22,15 C22,15.0032706 21.9999948,15.0065399 21.9999843,15.009808 L22.0249378,15 L22.0249378,19.5857864 C22.0249378,20.1380712 21.5772226,20.5857864 21.0249378,20.5857864 C20.7597213,20.5857864 20.5053674,20.4804296 20.317831,20.2928932 L18.0249378,18 L12.9835977,18 C12.7263047,14.0909841 9.47412135,11 5.5,11 C4.23590829,11 3.04485894,11.3127315 2,11.8650466 Z M6,7 C5.44771525,7 5,7.44771525 5,8 C5,8.55228475 5.44771525,9 6,9 L15,9 C15.5522847,9 16,8.55228475 16,8 C16,7.44771525 15.5522847,7 15,7 L6,7 Z" fill="#000000"/>
+		                                </g>
+		                                </svg>
+	                                </span>
+	                            </a>
+	                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+	                                <ul class="navi flex-column navi-hover py-2">
+	                                    <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
+	                                        Pilih Aksi:
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="{{ route('master.student.view') }}/${row.nis}" class="navi-link">
+	                                            <span class="navi-icon"><i class="la la-eye"></i></span>
+	                                            <span class="navi-text">Lihat</span>
+	                                        </a>
+	                                    </li>
+
+	                                </ul>
+	                            </div>
+	                        </div>
+	                        <div class="dropdown dropdown-inline">
+	                            <a href="javascript:;" class="btn btn-sm btn-clean btn-icon mr-2" data-toggle="dropdown">
+	                                <span class="svg-icon svg-icon-md">
+		                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+		                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		                                <rect x="0" y="0" width="24" height="24"/>
+		                                <path d="M6,2 L18,2 C18.5522847,2 19,2.44771525 19,3 L19,12 C19,12.5522847 18.5522847,13 18,13 L6,13 C5.44771525,13 5,12.5522847 5,12 L5,3 C5,2.44771525 5.44771525,2 6,2 Z M7.5,5 C7.22385763,5 7,5.22385763 7,5.5 C7,5.77614237 7.22385763,6 7.5,6 L13.5,6 C13.7761424,6 14,5.77614237 14,5.5 C14,5.22385763 13.7761424,5 13.5,5 L7.5,5 Z M7.5,7 C7.22385763,7 7,7.22385763 7,7.5 C7,7.77614237 7.22385763,8 7.5,8 L10.5,8 C10.7761424,8 11,7.77614237 11,7.5 C11,7.22385763 10.7761424,7 10.5,7 L7.5,7 Z" fill="#000000" opacity="0.3"/>
+		                                <path d="M3.79274528,6.57253826 L12,12.5 L20.2072547,6.57253826 C20.4311176,6.4108595 20.7436609,6.46126971 20.9053396,6.68513259 C20.9668779,6.77033951 21,6.87277228 21,6.97787787 L21,17 C21,18.1045695 20.1045695,19 19,19 L5,19 C3.8954305,19 3,18.1045695 3,17 L3,6.97787787 C3,6.70173549 3.22385763,6.47787787 3.5,6.47787787 C3.60510559,6.47787787 3.70753836,6.51099993 3.79274528,6.57253826 Z" fill="#000000"/>
+		                                </g>
+		                                </svg>
+	                                </span>
+	                            </a>
+	                            <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+	                                <ul class="navi flex-column navi-hover py-2">
+	                                    <li class="navi-header font-weight-bolder text-uppercase font-size-xs text-primary pb-2">
+	                                        Tambahkan data:
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="" class="navi-link" data-student-id="${row.nis}" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateUPD">
+	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>
+	                                            <span class="navi-text">UPD</span>
+	                                        </a>
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="" class="navi-link" data-student-id="${row.nis}" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateAspek">
+	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>
+	                                            <span class="navi-text">Aspek & Akhlak</span>
+	                                        </a>
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="" class="navi-link" data-student-id="${row.nis}" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateKetidakhadiran">
+	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>
+	                                            <span class="navi-text">Ketidakhadiran</span>
+	                                        </a>
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="" class="navi-link" data-student-id="${row.nis}" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updatePrestasi">
+	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>
+	                                            <span class="navi-text">Prestasi</span>
+	                                        </a>
+	                                    </li>
+	                                    <li class="navi-item">
+	                                        <a href="" class="navi-link" data-student-id="${row.nis}" data-student-name="'+row.name+'" data-type="create" data-toggle="modal" data-target="#updateKelulusan">
+	                                            <span class="navi-icon"><i class="la la-plus-square"></i></span>
+	                                            <span class="navi-text">Kelulusan</span>
+	                                        </a>
+	                                    </li>
+	                                </ul>
+	                            </div>
+	                        </div>
+	                        <a href="{{ route('master.student.detail') }}/personal/${row.nis}" class="btn btn-sm btn-clean btn-icon mr-2" title="Edit details">
+	                            <span class="svg-icon svg-icon-md">
+	                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+	                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+	                                        <rect x="0" y="0" width="24" height="24"/>
+	                                        <path d="M8,17.9148182 L8,5.96685884 C8,5.56391781 8.16211443,5.17792052 8.44982609,4.89581508 L10.965708,2.42895648 C11.5426798,1.86322723 12.4640974,1.85620921 13.0496196,2.41308426 L15.5337377,4.77566479 C15.8314604,5.0588212 16,5.45170806 16,5.86258077 L16,17.9148182 C16,18.7432453 15.3284271,19.4148182 14.5,19.4148182 L9.5,19.4148182 C8.67157288,19.4148182 8,18.7432453 8,17.9148182 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 10.707409) rotate(-135.000000) translate(-12.000000, -10.707409) "/>
+	                                        <rect fill="#000000" opacity="0.3" x="5" y="20" width="15" height="2" rx="1"/>
+	                                    </g>
+	                                </svg>
+	                            </span>
+	                        </a>
+	                    `;
 					},
 				}
 			],
@@ -374,6 +385,66 @@ var KTDatatableChildRemoteDataDemo = function() {
 
 		// Defind Student ID
 		var student_id = null;
+
+        datatable.on(
+            'datatable-on-init',
+            function(e, a) {
+                datatable.setActiveAll(false)
+            });
+
+        datatable.on(
+            'datatable-on-click-checkbox',
+            function(e, a) {
+                // datatable.checkbox() access to extension methods
+                var ids = datatable.checkbox().getSelectedId();
+                var count = ids.length;
+                console.log(ids);
+
+                $('#kt_datatable_selected_records_2').html(count);
+
+                if (count > 0) {
+                    $('#kt_datatable_group_action_form_2').collapse('show');
+                } else {
+                    $('#kt_datatable_group_action_form_2').collapse('hide');
+                }
+            });
+
+        // Start Jquery for mutiple delete
+        $('#kt_datatable_delete_all').on('click', function() {
+                Swal.fire({
+                    title: "Konfirmasi?",
+                    text: "Anda tidak dapat mengembalikan 3 data siswa yang telah terhapus",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, hapus sekarang!",
+                    cancelButtonText: "Batalkan",
+                }).then(function(result) {
+                    if (result.value) {
+                        var ids = datatable.checkbox().getSelectedId();
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('master.student.multiple.delete') }}",
+                            data: {
+                                ids: ids,
+                            },
+                            success: function(data){
+                                toastr.success('Berhasil menghapus data siswa');
+                                $('#kt_datatable_group_action_form_2').hide();
+                                datatable.reload();
+                            },
+                            error: function(data){
+                                toastr.error('Gagal menghapus data siswa');
+                            }
+                        });
+                    }else {
+                        Swal.fire(
+                            "Membatalkan!",
+                            "Data siswa tidak jadi dihapus",
+                            "warning"
+                        )
+                    }
+                });
+        });
 
 		// Start Jquery for crud UPD
 		$('#upd_name').select2({

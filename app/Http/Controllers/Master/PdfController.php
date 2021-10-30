@@ -75,7 +75,7 @@ class PdfController extends Controller
         $zip = new \ZipArchive();
         $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-        $path = storage_path('app\public\pdf/' . $token);
+        $path = storage_path('app/public/pdf/' . $token);
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
         foreach ($files as $name => $file) {
             // We're skipping all subfolders

@@ -17,7 +17,7 @@ $kelas_id = Request::get('kelas_id');
             </div>
             <div class="card-toolbar">
                 <!--begin::Button-->
-                <button type="button" data-toggle="modal" data-target="#add_jurnal_modal" class="btn btn-primary font-weight-bolder">
+                <button type="button" id="add_jurnal_open_modal" data-toggle="modal" data-target="#add_jurnal_modal" class="btn btn-primary font-weight-bolder">
                     <span class="svg-icon svg-icon-md">
                         <!--begin::Svg Icon | path:assets/media/svg/icons/Design/Flatten.svg-->
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -239,19 +239,19 @@ $kelas_id = Request::get('kelas_id');
 			});
 		}
 		var date = function() {
-            var start = moment().subtract(29, 'days');
-            var end = moment();
+            // var start = ;
+            // var end = ;
             var arrows = {
                 leftArrow: '<i class="la la-angle-left"></i>',
                 rightArrow: '<i class="la la-angle-right"></i>'
-            }
+            };
 			$('#kt_datatable_search_date').daterangepicker({
                 buttonClasses: ' btn',
                 applyClass: 'btn-primary',
                 cancelClass: 'btn-secondary',
 
-                startDate: start,
-                endDate: end,
+                startDate: moment().subtract(29, 'days'),
+                endDate: moment(),
                 ranges: {
                     'Hari ini': [moment(), moment()],
                     'Kemarin': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -266,8 +266,6 @@ $kelas_id = Request::get('kelas_id');
 
             $('#jurnal_date').datepicker({
                 todayHighlight: true,
-                orientation: "bottom left",
-                templates: arrows
             });
 		}
         var mainTable = function() {
@@ -448,7 +446,7 @@ $kelas_id = Request::get('kelas_id');
             }
         };
 
-        var jurnalTable = function() {
+        var studentList = function() {
             var jurnal_student = [];
 
             var datatable = $('#kt_datatable_2').KTDatatable({
@@ -490,7 +488,7 @@ $kelas_id = Request::get('kelas_id');
                 translate: {
                     records: {
                         processing: 'Loading...',
-                        noRecords: 'Data tidak ditemukan',
+                        noRecords: 'Data siswa tidak ditemukan',
                     }
                 },
 
@@ -534,13 +532,11 @@ $kelas_id = Request::get('kelas_id');
             datatable.on(
                 'datatable-on-init',
             function(e, row) {
-                // $('#kt_datatable_2 .datatable-head .datatable-cell-check').hide();
                 var kelas_id_index = datatable.getDataSourceParam('kelas_id');
                 $('#jurnal_kelas_id').val(kelas_id_index).change();
-                // console.log(kelas_id_index);
             });
 
-            function resetForm() {
+            function empty_add_jurnal() {
                 jurnal_student = null;
                 $('#jurnal_kelas_id').val('0').change();
                 $('#jurnal_mapel').val('0,0').change();
@@ -565,13 +561,14 @@ $kelas_id = Request::get('kelas_id');
                 datatable.search($(this).val().toLowerCase(), 'Type');
             });
 
-            $('#add_jurnal_modal').on('show.bs.modal', function(e) {
-                resetForm();
+            $('#add_jurnal_open_modal').on('click', function() {
+                console.log('Modal Open');
+                empty_add_jurnal();
                 datatable.load();
             })
 
             $('#add_jurnal_modal').on('hidden.bs.modal', function (e) {
-                resetForm();
+                empty_add_jurnal();
             })
 
             $('#kt_datatable_search_status_2, #kt_datatable_search_type_2').selectpicker();
@@ -610,9 +607,12 @@ $kelas_id = Request::get('kelas_id');
 
             $('#add_jurnal_keterangan_modal').on('show.bs.modal', function(e) {
                 var id = $('#jurnal_keterangan_id').val();
-                var name = datatable.getRecord(id).getColumn('name').getValue();
+                var lastResponse = datatable.getRecord(id).lastResponse.data;
+                var record = lastResponse.filter(function (el) {
+                    return  el.id == id
+                })[0];
 
-                $('#jurnal_keterangan_name').val(name);
+                $('#jurnal_keterangan_name').val(record.name);
             }).on('hide.bs.modal', function(e) {
                 var id = $('#jurnal_keterangan_id').val();
                 datatable.setInactive(id);
@@ -696,7 +696,7 @@ $kelas_id = Request::get('kelas_id');
 				form_mask();
 				date();
                 mainTable();
-                jurnalTable();
+                studentList();
 			}
 		};
 	}();

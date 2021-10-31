@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 use function GuzzleHttp\json_decode;
 
@@ -131,6 +132,35 @@ class JurnalController extends Controller
                 'message'   => 'Data gagal ditambahkan',
             ], 400);
         }
+    }
+
+    public function postExport(Request $request)
+    {
+        $date = Carbon::parse($request->date);
+        $data['jurnals'] = Jurnal::whereDate('date', $date)->get();
+        // return view('pdf.jurnal.main', $data);
+
+        $pdf = PDF::loadView('pdf.jurnal.main',  $data, [], [
+            'title'                    => 'Jurnal Kelas',
+            'author'                   => 'Bagas Aditya Mahendra',
+            'default_font' => 'poppins',
+            'custom_font_dir'   => base_path('public/fonts/'),
+            'custom_font_data'  => [
+                'poppins' => [
+                    'R'  => 'Poppins-Regular.ttf',    // regular font
+                    'B'  => 'Poppins-SemiBold.ttf',       // optional: bold font
+                ]
+            ],
+        ]);
+
+        // $pdf->getMpdf()->SetWatermarkImage(asset(setting('logo_l_1')));
+        // $pdf->getMpdf()->showWatermarkImage = true;
+        return $pdf->download('Jurnal - ' . $date->format('D M Y') . '.pdf');
+    }
+
+    public function postGetByDate(Request $request)
+    {
+        return Jurnal::select('id', 'date')->whereDate('date', Carbon::parse($request->date))->get();
     }
 
     public function postUpdate($id, Request $request)

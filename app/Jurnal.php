@@ -18,15 +18,21 @@ class Jurnal extends Model
 
     protected $appends = [
         'day',
+        'clone_id',
     ];
 
     protected $casts = [
-        'date'
+        'date' => 'date'
     ];
 
     public function getDateAttribute()
     {
-        return Carbon::parse($this->getRawOriginal('date'))->locale('id')->isoFormat('D, MMMM YYYY');
+        return Carbon::parse($this->getRawOriginal('date'))->locale('id')->isoFormat('D MMMM YYYY');
+    }
+
+    public function getCloneIdAttribute()
+    {
+        return $this->id;
     }
 
     public function getDayAttribute()
@@ -47,5 +53,10 @@ class Jurnal extends Model
     public function sub_mapel()
     {
         return $this->belongsTo('App\SubMapel', 'sub_mapel_id', 'id');
+    }
+
+    public function student()
+    {
+        return $this->hasMany('App\JurnalStudent', 'jurnal_id', 'id');
     }
 }

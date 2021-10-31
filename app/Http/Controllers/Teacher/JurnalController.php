@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Teacher;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\KelulusanResource;
 use Illuminate\Pagination\Paginator;
+use PDF;
 use App\Jurnal;
 use App\JurnalStudent;
 use App\Kelas;
@@ -96,7 +97,6 @@ class JurnalController extends Controller
             'mapel'             => 'required',
             'kelas_id'          => 'required',
             'materi'            => 'required',
-            // 'jurnal_student'    => 'array',
         ]);
 
         DB::beginTransaction();
@@ -106,7 +106,7 @@ class JurnalController extends Controller
             $jurnal = Jurnal::create([
                 'date'          => carbon($request->date),
                 'jam_ke'        => $request->jam_ke,
-                'mapel_id'      => $ms[0],
+                'mapel_id'      => $ms[0] == 0 && $ms[1] == 0 ? 1 : $ms[0],
                 'sub_mapel_id'  => $ms[1],
                 'kelas_id'      => $request->kelas_id,
                 'materi'        => $request->materi,
@@ -145,11 +145,42 @@ class JurnalController extends Controller
         }
     }
 
+    public function postExport(Request $request)
+    {
+        $date = Carbon::parse($request->date);
+        $data['jurnals'] = Jurnal::whereDate('date', $date)->get();
+        // return view('pdf.jurnal.main', $data);
+
+        $pdf = PDF::loadView('pdf.jurnal.main',  $data, [], [
+            'title'                    => 'Jurnal Kelas',
+            'author'                   => 'Bagas Aditya Mahendra',
+            'default_font' => 'poppins',
+            'custom_font_dir'   => base_path('public/fonts/'),
+            'custom_font_data'  => [
+                'poppins' => [
+                    'R'  => 'Poppins-Regular.ttf',    // regular font
+                    'B'  => 'Poppins-SemiBold.ttf',       // optional: bold font
+                ]
+            ],
+        ]);
+
+        // $pdf->getMpdf()->SetWatermarkImage(asset(setting('logo_l_1')));
+        // $pdf->getMpdf()->showWatermarkImage = true;
+        return $pdf->download('Jurnal - ' . $date->format('D M Y') . '.pdf');
+    }
+
+    public function postGetByDate(Request $request)
+    {
+        return Jurnal::select('id', 'date')->whereDate('date', Carbon::parse($request->date))->get();
+    }
+
     public function postUpdate($id, Request $request)
     {
     }
 
-    public function postDestroy($id)
+    public function postMultipleDestroy(Request $request)
     {
+        $ids = $request->ids;
+        return $ids;
     }
 }

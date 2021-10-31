@@ -54,6 +54,13 @@ $kelas_id = Request::get('kelas_id');
             </div>
             <!--end::Search Form-->
             <!--end: Search Form-->
+            <div class="mt-10 mb-5 collapse" id="kt_datatable_group_action_form_2">
+                <div class="d-flex align-items-center">
+                    <div class="font-weight-bold text-danger mr-3">Memilih
+                    <span id="kt_datatable_selected_records_2">0</span> siswa:</div>
+                    <button class="btn btn-sm btn-danger mr-2" type="button" id="kt_datatable_delete_all_2">Hapus Semua</button>
+                </div>
+            </div>
             <!--begin: Datatable-->
             <div class="datatable datatable-bordered datatable-head-custom" id="kt_datatable"></div>
             <!--end: Datatable-->
@@ -301,6 +308,11 @@ $kelas_id = Request::get('kelas_id');
                     key: 'date'
                 },
 
+                extensions: {
+                    // boolean or object (extension options)
+                    checkbox: true,
+                },
+
                 // columns definition
                 columns: [
                     {
@@ -310,6 +322,13 @@ $kelas_id = Request::get('kelas_id');
                         width: 30,
                         textAlign: 'center',
                     }, {
+                        field: 'clone_id',
+                        title: '#',
+                        sortable: false,
+                        width: 20,
+                        selector: true,
+                        textAlign: 'center',
+                    },{
                         field: 'day',
                         title: 'Hari',
                         sortable: 'asc',
@@ -371,6 +390,65 @@ $kelas_id = Request::get('kelas_id');
 
             $('#mainTableRefresh').on('click', function() {
                 datatable.reload();
+            });
+
+            datatable.on(
+            'datatable-on-click-checkbox',
+            function(e) {
+                // datatable.checkbox() access to extension methods
+                var ids = datatable.checkbox().getSelectedId();
+                console.log(ids);
+                var count = ids.length;
+
+                $('#kt_datatable_selected_records_2').html(count);
+
+                if (count > 0) {
+                    $('#kt_datatable_group_action_form_2').collapse('show');
+                } else {
+                    $('#kt_datatable_group_action_form_2').collapse('hide');
+                }
+            });
+
+            // Delete All Selected Student
+            $('#kt_datatable_delete_all_2').on('click', function() {
+                var ids = datatable.checkbox().getSelectedId();
+                Swal.fire({
+                    title: "Apakah anda yakin?",
+                    text: `terpilih data ${ids.lenght} akan dihapus secara permanen`,
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Ya, hapus data",
+                    cancelButtonText: "Batalkan operasi",
+                }).then(function(result) {
+                    if (result.value) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{ route('master.jurnal.multiple.destroy') }}",
+                            data: {
+                                ids: ids,
+                            },
+                            cache: false,
+                            success: function(res){
+                                datatable.reload();
+                                Swal.fire(
+                                    "Sukses!",
+                                    "Data jurnal berhasil dihapus.",
+                                    "success"
+                                );
+                            },
+                            error: function(error){
+                                alert('Function error');
+                            }
+                        });
+                    }else {
+                        Swal.fire(
+                            "Operasi Gagal!",
+                            "Data jurnal gagal dihapus.",
+                            "warning"
+                        );
+                    }
+                });
+
             });
 
             $('#kt_datatable_search_kelas').selectpicker();

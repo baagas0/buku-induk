@@ -181,6 +181,7 @@ class JurnalController extends Controller
     public function postMultipleDestroy(Request $request)
     {
         $ids = $request->ids;
-        return $ids;
+
+        return Jurnal::whereIn('id', $ids)->delete();
     }
 }

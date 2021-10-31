@@ -137,7 +137,10 @@ class JurnalController extends Controller
     {
     }
 
-    public function postDestroy($id)
+    public function postMultipleDestroy(Request $request)
     {
+        $ids = $request->ids;
+
+        return Jurnal::whereIn('id', $ids)->delete();
     }
 }

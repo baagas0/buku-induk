@@ -29,7 +29,7 @@
 	</a>
 </li> --}}
 @endif
-@if(auth()->user()->role->name == 'Wakakurikulum')
+@if(auth()->user()->role->name == 'Waka Kurikulum')
 <li class="menu-item">
 	<a href="{{ route('master.jurnal') }}" class="menu-link">
 		<span class="menu-text">Jurnal</span>
